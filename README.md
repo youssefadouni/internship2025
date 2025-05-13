@@ -41,7 +41,8 @@ You **do not** need to apply any AI or NLP processing to the extracted text — 
 
 - Fork this repository.
 - Add your solution in a file called `extract_text_[your_full_name].py`.
-- Include a brief `README.md` in your fork explaining your approach and any dependencies.
+- Include a brief `DEV_LOG_[your_full_name].md` in your fork explaining your approach and any dependencies.
+- if you want to deploy more than one file/folder, please add your full name to the name of the file/folder
 - Submit your repo by creating a **pull request** to this repository.
 
 ---
