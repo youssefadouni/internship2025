@@ -40,7 +40,7 @@ You **do not** need to apply any AI or NLP processing to the extracted text — 
 ## 📬 How to Apply
 
 - Fork this repository.
-- Add your solution in a file called `extract_text.py`.
+- Add your solution in a file called `extract_text_[your_full_name].py`.
 - Include a brief `README.md` in your fork explaining your approach and any dependencies.
 - Submit your repo by creating a **pull request** to this repository.
 
