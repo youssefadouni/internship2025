@@ -1,0 +1,5 @@
+pytesseract
+pdfplumber
+python-docx
+openpyxl
+Pillow
