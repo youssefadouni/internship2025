@@ -1,0 +1,9 @@
+pytesseract
+pdfplumber
+python-docx
+openpyxl
+Pillow
+tqdm
+nltk
+langdetect
+textblob
