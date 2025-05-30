@@ -1,0 +1,2032 @@
+
+=== Page 1 ===
+remote sensing  
+Review
+Change Detection Based on Artiﬁcial Intelligence:
+State-of-the-Art and Challenges
+Wenzhong Shi 1, Min Zhang 1,2, *
+ , Rui Zhang 1,3 , Shanxiong Chen 1,2
+ and Zhao Zhan 1,2
+1 Department of Land Surveying and Geo-Informatics, The Hong Kong Polytechnic University, Hung Hom,
+Hong Kong, China; lswzshi@polyu.edu.hk (W.S.); rzhang@cumt.edu.cn (R.Z.);
+shanxiongchen@whu.edu.cn (S.C.); zhanzhao@whu.edu.cn (Z.Z.)
+2 School of Remote Sensing and Information Engineering, Wuhan University, Wuhan 430079, China
+3 School of Environment Science and Spatial Informatics, China University of Mining and Technology,
+Xuzhou 221116, China
+* Correspondence: 007zhangmin@whu.edu.cn or lsgi-min.zhang@polyu.edu.hk
+Received: 13 April 2020; Accepted: 20 May 2020; Published: 25 May 2020
+/gid00030/gid00035/gid00032/gid00030/gid00038/gid00001/gid00033/gid00042/gid00045/gid00001
+/gid00048/gid00043/gid00031/gid00028/gid00047/gid00032/gid00046
+Abstract: Change detection based on remote sensing (RS) data is an important method of detecting
+changes on the Earth’s surface and has a wide range of applications in urban planning, environmental
+monitoring, agriculture investigation, disaster assessment, and map revision. In recent years,
+integrated artiﬁcial intelligence (AI) technology has become a research focus in developing new
+change detection methods. Although some researchers claim that AI-based change detection
+approaches outperform traditional change detection approaches, it is not immediately obvious how
+and to what extent AI can improve the performance of change detection. This review focuses on
+the state-of-the-art methods, applications, and challenges of AI for change detection. Speciﬁcally,
+the implementation process of AI-based change detection is ﬁrst introduced. Then, the data from
+diﬀerent sensors used for change detection, including optical RS data, synthetic aperture radar (SAR)
+data, street view images, and combined heterogeneous data, are presented, and the available open
+datasets are also listed. The general frameworks of AI-based change detection methods are reviewed
+and analyzed systematically, and the unsupervised schemes used in AI-based change detection
+are further analyzed. Subsequently, the commonly used networks in AI for change detection are
+described. From a practical point of view, the application domains of AI-based change detection
+methods are classiﬁed based on their applicability. Finally, the major challenges and prospects of AI
+for change detection are discussed and delineated, including (a) heterogeneous big data processing,
+(b) unsupervised AI, and (c) the reliability of AI. This review will be beneﬁcial for researchers in
+understanding this ﬁeld.
+Keywords: artiﬁcial intelligence; change detection; remote sensing; deep learning; neural network;
+unsupervised learning; SAR; hyperspectral; multispectral; street view
+1. Introduction
+Change detection is the process of identifying diﬀerences in the state of an object or phenomenon
+by observing it at diﬀerent times [1]. It is one of the major problems in earth observation and has been
+extensively researched in recent decades. Multi-temporal RS data, such as satellite imagery and aerial
+imagery, can provide abundant information to identify land use and land cover (LULC) diﬀerences
+in a speciﬁc area across a period of time. This is very crucial in various applications, such as urban
+planning, environmental monitoring, agriculture investigation, disaster assessment, and map revision.
+With the ongoing development of Earth observation techniques, huge amounts of RS data with
+a high spectral–spatial–temporal resolution are now available, which brings new requirements of
+Remote Sens. 2020, 12, 1688; doi:10.3390/rs12101688 www.mdpi.com /journal/remotesensing
+=== Page 2 ===
+Remote Sens. 2020, 12, 1688 2 of 35
+change detection techniques and greatly promotes their development. To address the problems
+brought about by ﬁner spatial and spectral resolution images during the change detection process,
+many change detection approaches are proposed. Here, they are broadly divided into two categories:
+traditional and AI-based. Figure 1 presents the general ﬂow of traditional change detection and
+AI-based change detection.
+Remote Sens. 2020, 12, x FOR PEER REVIEW 2 of 36 
+change detection techniques and greatly promotes their development. To address the problems 
+brought about by finer spatial and spectral  resolution images during the change detection process, 
+many change detection approaches are proposed. Here, they are broadly divided into two categories: 
+traditional and AI-based. Figure 1 presents the general flow of traditional change detection and AI -
+based change detection. 
+Figure 1. General schematic diagram of change detection. 
+Existing change detection review s have focused mainly on the design of change detection 
+techniques in multi-temporal hyperspectral images (HSIs) and high-spatial-resolution images [1-4]. 
+The techniques they reviewed are mainly traditional change detection approaches, which can be 
+generally summarized into the following groups:  
+ Visual analysis: the change map is obtained by manual interpretation, which can provide highly
+reliable results based on expert knowledge but is time-consuming and labor-intensive;
+ aAlgebra-based methods: the change map  is obtained  by performing algebraic operation or
+transformation on multi -temporal data, such as image differencing , image regression , image
+ratioing, and change vector analysis (CVA);
+ Transformation: data reduction methods, such as principle component analysis (PCA), Tasseled
+Cap (KT), multivariate alteration detection (MAD), Gramm–Schmidt (GS), and Chi-Square, are
+used to suppress correlated information and highlight variance in multi-temporal data;
+ Classification-based methods: changes are identified by comparing multiple classification maps
+(i.e., post-classification comparison), or using a trained classifier to directly classify data from
+multiple periods (i.e., multidate classification or direct classification);
+ Advanced models:  advanced models, such as the Li-Strahler reflectance model,  the s pectral
+mixture model, and the b iophysical parameter method , are used to convert the spectral
+reflectance values of multi-period data into physically based parameters or fractions to perform
+change analysis, and this is more intuitive and has physical meaning, but it is complicated and
+time-consuming;
+ Others: hybrid approaches and others, such as  knowledge-based, spatial-statistics-based, and
+integrated GIS and RS methods, are used.
+According to the detect ion unit, these methods can also be classified based on pixel -level,
+feature-level, object -level, and three -dimensions (3D) object -level, and have been systematically 
+reviewed in the literature [5–7]. Due to the rapid development of computer technology, the research 
+of traditional change detection approaches has turned to integrating AI techniques.  In both 
+traditional change detection flow and AI-based flow, the first step is data acquisition and the aim of 
+change detection is to obtain the ch ange detection map for various applications; after preparing the 
+data, traditional approaches typically consist of two steps, including a homogenization process and 
+a change detection process, while the AI -based approaches generally require an extra training set 
+Figure 1. General schematic diagram of change detection.
+Existing change detection reviews have focused mainly on the design of change detection
+techniques in multi-temporal hyperspectral images (HSIs) and high-spatial-resolution images [1–4].
+The techniques they reviewed are mainly traditional change detection approaches, which can be
+generally summarized into the following groups:
+• Visual analysis: the change map is obtained by manual interpretation, which can provide highly
+reliable results based on expert knowledge but is time-consuming and labor-intensive;
+• aAlgebra-based methods: the change map is obtained by performing algebraic operation
+or transformation on multi-temporal data, such as image di ﬀerencing, image regression,
+image ratioing, and change vector analysis (CVA);
+• Transformation: data reduction methods, such as principle component analysis (PCA), Tasseled
+Cap (KT), multivariate alteration detection (MAD), Gramm–Schmidt (GS), and Chi-Square,
+are used to suppress correlated information and highlight variance in multi-temporal data;
+• Classiﬁcation-based methods: changes are identiﬁed by comparing multiple classiﬁcation maps
+(i.e., post-classiﬁcation comparison), or using a trained classiﬁer to directly classify data from
+multiple periods (i.e., multidate classiﬁcation or direct classiﬁcation);
+• Advanced models: advanced models, such as the Li-Strahler reﬂectance model, the spectral
+mixture model, and the biophysical parameter method, are used to convert the spectral
+reﬂectance values of multi-period data into physically based parameters or fractions to perform
+change analysis, and this is more intuitive and has physical meaning, but it is complicated
+and time-consuming;
+• Others: hybrid approaches and others, such as knowledge-based, spatial-statistics-based,
+and integrated GIS and RS methods, are used.
+According to the detection unit, these methods can also be classiﬁed based on pixel-level,
+feature-level, object-level, and three-dimensions (3D) object-level, and have been systematically
+reviewed in the literature [5–7]. Due to the rapid development of computer technology, the research of
+traditional change detection approaches has turned to integrating AI techniques. In both traditional
+change detection ﬂow and AI-based ﬂow, the ﬁrst step is data acquisition and the aim of change
+[IMAGE TEXT - 1]: D: cage Homogenization a ; ata acquisition process Training set generation Algebra-based. Mapping transformation change detection General Al-based change Oi Recterenterel m Pixel-level LiDAR Object-level ™ Scene-level @ 3D object-level toe Mullti-model integrated GIS data Change detection map Various applications Trained AI model & Autoencoder @ Binary map @ Urban contexts Change detection map Deep belief nerwork ™@ One-classmap @ Resources & environment @ Binary map I Convolutional neural nerwork ys @ From-tomap @ Natural disasters ™@ One-classmap Recurrent neural nerwork —— @ Instancemap @ Astronomy @ From-tomap I Pulse couple neural network Muthi- O) 200 @ Instancemap = temporal data = = = Traditional change detection AlI-based change detection
+
+=== Page 3 ===
+Remote Sens. 2020, 12, 1688 3 of 35
+detection is to obtain the change detection map for various applications; after preparing the data,
+traditional approaches typically consist of two steps, including a homogenization process and a change
+detection process, while the AI-based approaches generally require an extra training set generation
+process and an AI model training process for change detection. Obviously, the key components of
+AI-based approaches are the AI techniques.
+AI techniques, also called machine intelligence, can provide a better performance in various
+data-processing tasks. It can be deﬁned as a system’s ability to correctly interpret external data,
+to learn from such data, and to use those learnings to achieve speciﬁc goals and tasks through ﬂexible
+adaptation [8]. AI techniques in this paper focus on the recent emergence of deep learning methods,
+new network structures, and intelligent machine learning methods, which are inspired by biological
+systems. Traditional machine learning methods, such as support vector machines and decision trees,
+have not been considered in this review due to their relatively low intelligence and existing reviews [7].
+Many new approaches integrating AI techniques have been developed to improve the accuracy
+and automation of change detection. A wide body of RS research has suggested that AI-based change
+detection approaches are superior to the traditional in terms of feature extraction [9,10]. Due to the
+powerful modeling and learning capabilities, AI techniques can model the relationship between the
+image object and its real-world geographical feature as closely as possible, which enables the detection
+of more real change information. Generally, they utilize spatial-context information in multi-temporal
+data to learn hierarchical feature representations, and these high-level feature representations are more
+eﬀective and robust in change detection tasks.
+Most existing studies reviewing AI have either been general reviews concerning the development
+of the AI algorithm [ 11] or detailed RS application reviews for a speciﬁc hot-ﬁeld [ 12]. In [ 13],
+the authors focused on the theories, tools, and challenges of deep learning in RS community. In other
+words, these review articles are based on the theory and application of AI techniques in RS. In the
+ﬁeld of RS data change detection, there is still a lack of a thorough review of AI methods applied
+to multi-source data. This paper provides a deep review of the application of AI technologies in RS
+change detection processing. It focuses on the state-of-the-art methods, applications, and challenges of
+AI for change detection in multi-temporal data. The main contributions of this paper are as follows:
+1. The implementation process of AI-based change detection is introduced, and we summarize
+common implementation strategies that can help beginners understand this research ﬁeld;
+2. We present the data from diﬀerent sensors used for AI-based change detection in detail, mainly
+including optical RS data, SAR data, street-view images, and combined heterogeneous data.
+More practically, we list the available open datasets with annotations, which can be used as
+benchmarks for training and evaluating AI models in future change detection studies;
+3. By systematically reviewing and analyzing the process of AI-based change detection methods,
+we summarize their general frameworks in a practical way, which can help to design change
+detection approaches in the future. Furthermore, the unsupervised schemes used in AI-based
+change detection are analyzed to help address the problem of lack of training samples in
+practical applications;
+4. We describe the commonly used networks in AI for change detection. Analyzing their applicability
+is helpful for the selection of AI models in practical applications;
+5. We provide the application of AI-based change detection in various ﬁelds, and subdivide it into
+diﬀerent data types, which helps those interested in these areas to ﬁnd relevant AI-based change
+detection approaches;
+6. We delineate and discuss the challenges and prospects of AI for change detection from three
+major directions, i.e., heterogeneous big data processing, unsupervised AI, and the reliability of
+AI, providing a useful reference for future research.
+The rest of the paper is organized as follows. We introduce the implementation process of
+AI-based change detection in Section 2; and we list data sources used for change detection in Section 3;
+=== Page 4 ===
+Remote Sens. 2020, 12, 1688 4 of 35
+The review of general frameworks and commonly used networks in AI for change detection are
+presented in Sections 4 and 5, respectively; in Section 6, we summarize the various applications of the
+methods; after discussing the challenges and opportunities of AI-based change detection in Section 7,
+we draw conclusions of this review in Section 8.
+2. Implementation Process of AI-Based Change Detection
+Figure 1 illustrates the general ﬂow of AI-based change detection. The key is to obtain a
+high-performance trained AI model. In detail, as presented in Figure 2, the implementation process of
+AI-based change detection includes the following four main steps:
+1. Homogenization: Due to di ﬀerences in illumination and atmospheric conditions, seasons,
+and sensor attitudes at the time of acquisition, multi-period data usually need to be homogenized
+before change detection. Geometric and radiometric correction are two commonly used
+methods [14,15]. The former aims to geometrically align two or more given pieces of data,
+which can be achieved through registration or co-registration. Given two period data, only
+when they are overlaid can the comparison between corresponding positions be meaningful [16].
+The latter aims to eliminate radiance or reﬂectance diﬀerences caused by the digitalization process
+of sensors and atmospheric attenuation distortion caused by absorption and scattering in the
+atmosphere [4], which helps to reduce false alarms caused by these radiation errors in change
+detection. For heterogeneous data, a special AI model structure can be designed for feature space
+transformation to achieve change detection (see Section 4.1.2);
+2. Training set generation: To develop the AI model, a large, high-quality training set is required
+that can help algorithms to understand that certain patterns or series of outcomes come with a
+given question. Multi-period data are labeled or annotated using certain techniques (e.g., manual
+annotation [17], pre-classiﬁcation [18], use of thematic data [19]) to make it easy for the AI model
+to learn the characteristics of the changed objects. Figure 2 presents an annotated example for
+building change detection, which is composed of two-period RS images and a corresponding
+ground truth labeled with building changes at the pixel level. Based on the ground truth,i.e., prior
+knowledge, the AI model can be trained in a supervised manner. To alleviate the problem of lack
+of training data, data augmentation, which is widely used, is a good strategy, such as horizontal
+or vertical ﬂip, rotation, change in scale, crop, translation, or adding noise, which can signiﬁcantly
+increase the diversity of data available for training models, without actually collecting new data;
+3. Model training: After the training set is generated, it can usually be divided into two datasets
+according to the number of samples or the geographic area: a training set for AI model training
+and a test set for accuracy evaluation during the training process [20]. The training and testing
+processes are performed alternately and iteratively. During the training process, the model
+is optimized according to a learning criterion, which can be a loss function in deep learning
+(e.g., softmax loss [ 21], contrastive loss [ 22], Euclidean loss [ 23], or cross-entropy loss [ 24]).
+By monitoring the training process and test accuracy, the convergence state of the AI model can
+be obtained, which can help in adjusting its hyperparameters (such as the learning rate), and also
+in judging whether the model performance has reached the best (i.e., termination) condition;
+4. Model serving: By deploying a trained AI model, change maps can be generated more intelligently
+and automatically for practical applications. Moreover, this can help validate the generalization
+ability and robustness of the model, which is an important aspect of evaluating the practicality of
+the AI-based change detection technique.
+=== Page 5 ===
+Remote Sens. 2020, 12, 1688 5 of 35
+Remote Sens. 2020, 12, x FOR PEER REVIEW 5 of 36 
+ 
+ 
+Figure 2. Implementation process of AI-based change detection (black arrows indicate workflow and 
+red arrow indicates an example). 
+The above steps provide a general implementation process of AI -based change detection, but 
+the structure of the AI model is diverse and needs to be well designed according to different 
+application situations and the training data, which will be introduced in Sections 4 and 5. It is worth 
+mentioning that existing mature frameworks such as TensorFlow [25], Keras [26], Pytorch [27], and 
+Caffe [28], help researchers more easily realize the design, training, and deployment of AI models,  
+and their development documents provide detailed introductions. 
+3. Data Sources for Change Detection 
+With the development of data acquisition platforms such as satellites, drones, and ground 
+survey vehicles, the massive multi -source RS data that they prod uce bring forth new application 
+requirements for land change monitoring. In particular, multi-sensor high-spatial and high-temporal-
+resolution data require more automated and robust change detection methods to reduce the cost of 
+manual interpretation. By s ummarizing the data types used for change detection, we can deeply 
+analyze the applicability of existing change detection methods to the data. In this paper, the types of 
+data used for change detection are divided into optical RS images, SAR images, and street view 
+images. It should be noted that street view images are usually not used as RS data but as auxiliary 
+data [29–31], so it is not common in the RS community. Still,  there are overlapping ideas for change 
+detection. In this paper, street view image s are treated as a kind of RS data in a broad sense and 
+reviewed, because they can provide street-level observation data. Moreover, the methods combining 
+heterogeneous data for change detection are summarized  and analyzed. Examples of different data 
+sources are shown in Figure 3. Optical RS and SAR images are gathered with passive and active 
+sensors, respectively, covering different electromagnetic spectral ranges. Other data sources, such as 
+digital elevation models (DEMs) , geographic information system ( GIS) data, and point cloud data, 
+can provide valuable supplementary attributes. Overhead remote sensing collects information over 
+large spatial areas, but its time resolution is relatively low. Street view images can provide nearly 
+real-time information at street-level. For detailed descriptions of optical RS images, SAR images, 
+street view images, and combined heterogeneous data, please refer to Section 3.1. In addition, Section 
+3.2 lists existing open datasets for change detection tasks  that can be employe d as benchmark s for 
+future research. 
+  
+Figure 2. Implementation process of AI-based change detection (black arrows indicate workﬂow and
+red arrow indicates an example).
+The above steps provide a general implementation process of AI-based change detection, but the
+structure of the AI model is diverse and needs to be well designed according to diﬀerent application
+situations and the training data, which will be introduced in Sections 4 and 5. It is worth mentioning
+that existing mature frameworks such as TensorFlow [ 25], Keras [26], Pytorch [27], and Caﬀe [28],
+help researchers more easily realize the design, training, and deployment of AI models, and their
+development documents provide detailed introductions.
+3. Data Sources for Change Detection
+With the development of data acquisition platforms such as satellites, drones, and ground survey
+vehicles, the massive multi-source RS data that they produce bring forth new application requirements
+for land change monitoring. In particular, multi-sensor high-spatial and high-temporal-resolution
+data require more automated and robust change detection methods to reduce the cost of manual
+interpretation. By summarizing the data types used for change detection, we can deeply analyze the
+applicability of existing change detection methods to the data. In this paper, the types of data used for
+change detection are divided into optical RS images, SAR images, and street view images. It should
+be noted that street view images are usually not used as RS data but as auxiliary data [ 29–31], so it
+is not common in the RS community. Still, there are overlapping ideas for change detection. In this
+paper, street view images are treated as a kind of RS data in a broad sense and reviewed, because
+they can provide street-level observation data. Moreover, the methods combining heterogeneous data
+for change detection are summarized and analyzed. Examples of di ﬀerent data sources are shown
+in Figure 3. Optical RS and SAR images are gathered with passive and active sensors, respectively,
+covering diﬀerent electromagnetic spectral ranges. Other data sources, such as digital elevation
+models (DEMs), geographic information system (GIS) data, and point cloud data, can provide valuable
+supplementary attributes. Overhead remote sensing collects information over large spatial areas,
+but its time resolution is relatively low. Street view images can provide nearly real-time information
+at street-level. For detailed descriptions of optical RS images, SAR images, street view images,
+and combined heterogeneous data, please refer to Section 3.1. In addition, Section 3.2 lists existing
+open datasets for change detection tasks that can be employed as benchmarks for future research.
+[IMAGE TEXT - 1]: - II ae Bi Annotation L.A . y OPre-classification Training set Criterion ¢ LA A) 1 Use of thematic data @) ) © yearn WV) ms @ Augumentaion Train test loop (e)Annetation (building changes fa Scale & Crop Tess a Homogenization Model Serving Two or more pplication validation Trained AI I inference ve
+
+=== Page 6 ===
+Remote Sens. 2020, 12, 1688 6 of 35
+Remote Sens. 2020, 12, x FOR PEER REVIEW 6 of 36 
+ 
+   
+(a) (b) (c) 
+   
+(d) (e) (f) 
+Figure 3. Examples of different data sources for change detection: ( a) Optical RS image (obtained by 
+Quickbird); ( b) SAR image (obtained by the Advanced Land Observing Satellite  (ALOS) Phased 
+Array type L -band Synthetic Aperture Radar ( PALSAR)); ( c) digital elevation model ( DEM); (d) 
+geographic information system ( GIS) data (from OpenStreetMap [32]); (e) Point cloud data (from 
+International Society for Photogrammetry and Remote S ensing (ISPRS) benchmarks [33]); (f) Street 
+view image (from Cityscapes datasets [34]). 
+3.1. Data Used for Change Detection 
+3.1.1. Optical RS Images 
+Optical RS images can be divided into hyperspectral, multispectral , and panchromatic images 
+according to the number of bands.  HSIs are volumetric image cubes that consist of hundreds of 
+spectral bands. They have narrow bands over a wide portion of the electromagnetic spectrum ; the 
+band range is generally less than 10 nm. Multispectral images typically contain multiple bands but 
+fewer than 15 bands. The spectral resolution of multispectral images is in the range of 0.1 times the 
+wavelengths. Panchromatic images have a single band that is formed by using the total light energy 
+in the visible spectrum (instead of partitioning it into different spectra). A side-by-side example of 
+hyperspectral, multispectral, and panchromatic image s is shown in Figure 4. HSIs are gathered by 
+the AVIRIS sensor [35]; multispectral and panchromatic images are taken from the Quickbird satellite. 
+The second row of Figure 4 shows the spectral intensity of a selected image pixel and the spectral 
+resolution of the three types of images. Therefore, images with different number of bands, reflecting 
+the spectral resolution, require different methods for change detection. 
+ 
+Figure 3. Examples of diﬀerent data sources for change detection: (a) Optical RS image (obtained by
+Quickbird); (b) SAR image (obtained by the Advanced Land Observing Satellite (ALOS) Phased Array
+type L-band Synthetic Aperture Radar (PALSAR)); (c) digital elevation model (DEM); (d) geographic
+information system (GIS) data (from OpenStreetMap [32]); (e) Point cloud data (from International
+Society for Photogrammetry and Remote Sensing (ISPRS) benchmarks [33]); (f) Street view image (from
+Cityscapes datasets [34]).
+3.1. Data Used for Change Detection
+3.1.1. Optical RS Images
+Optical RS images can be divided into hyperspectral, multispectral, and panchromatic images
+according to the number of bands. HSIs are volumetric image cubes that consist of hundreds of spectral
+bands. They have narrow bands over a wide portion of the electromagnetic spectrum; the band range
+is generally less than 10 nm. Multispectral images typically contain multiple bands but fewer than
+15 bands. The spectral resolution of multispectral images is in the range of 0.1 times the wavelengths.
+Panchromatic images have a single band that is formed by using the total light energy in the visible
+spectrum (instead of partitioning it into diﬀerent spectra). A side-by-side example of hyperspectral,
+multispectral, and panchromatic images is shown in Figure 4. HSIs are gathered by the AVIRIS
+sensor [35]; multispectral and panchromatic images are taken from the Quickbird satellite. The second
+row of Figure 4 shows the spectral intensity of a selected image pixel and the spectral resolution of
+the three types of images. Therefore, images with diﬀerent number of bands, reﬂecting the spectral
+resolution, require diﬀerent methods for change detection.
+HSIs have hundreds or even thousands of continuous and narrow bands, which can provide
+abundant spectral and spatial information. Multi-temporal HSIs are of great signiﬁcance in
+distinguishing the subtle changes in ground objects through their high-dimensional feature information.
+The detailed information on spectral changes presents promising change detection performance.
+However, it increases the redundancy of the data and makes it diﬃcult to interpret. Moreover, due to
+the generally low spatial resolution of HSIs, the textures around the pixels are vague, and mixed pixels
+occupy a large proportion. Change detection methods for HSIs must address the problems of high
+[IMAGE TEXT - 1]: E eatues Z CAT,
+
+[IMAGE TEXT - 2]: a es PAC e = ae a elk Scant Se A RE ‘ ae Ste) be he ae irae Saree
+
+[IMAGE TEXT - 3]: “ v
+
+[IMAGE TEXT - 4]: es 2 . ear as ety ) a Fad » ¥ aN Pucca a a BX &
+
+[IMAGE TEXT - 5]: zs tows fore oo A,
+
+[IMAGE TEXT - 6]: = a a - = a = —= Eg Ez
+
+=== Page 7 ===
+Remote Sens. 2020, 12, 1688 7 of 35
+dimensionality, mixed pixels, high computational cost, and a limited training dataset. E ﬀective AI
+algorithms can be employed to solve these problems and have been proved to achieve satisfactory
+performance [36–39].
+Multispectral images can be acquired economically and stably, with spatial resolution ranging
+from low to high. They can provide rich colors, textures, and other properties. Images with high spatial
+resolution or very high spatial resolution (10 to 100 cm/pixel) can also reﬂect the structure information
+of the ground objects [ 40]. Consequently, they are widely used for change detection. Speciﬁcally,
+the most commonly used types of multispectral images for AI-based change detection methods are
+derived from the Landsat series of satellites [41–65] and the Sentinel series of satellites [66,67], due to
+their low acquisition cost and high time and space coverage. In addition, other satellites, such as
+Quickbird [68–74], SPOT series [75–78], Gaofen series [14,79,80], Worldview series [81–85], provide
+high and very high spatial resolution images, and various aircrafts provide very high spatial resolution
+aerial images [20,86–94], allowing the change detection results to retain more details of the changes.
+Remote Sens. 2020, 12, x FOR PEER REVIEW 7 of 36 
+ 
+ 
+Figure 4.  Examples of hyperspectral, multispectral, and panchromatic images, where the 
+hyperspectral image is from Indian Pines ; multispectral and panchromatic images are from 
+Quickbird. 
+HSIs have hundreds or even thousands of continuous and narrow bands, which can provide 
+abundant spectral and spatial information. Multi -temporal HSIs are of great significance in 
+distinguishing the subtle changes in ground objects through their high-dimensional feature 
+information. The detailed information on spectral changes presents promising change detection 
+performance. However, it increases the redundancy of the data and makes it difficult to interpret. 
+Moreover, due to the  generally low spatial resolution of HSIs, the textures around the pixels are 
+vague, and mixed pixels occupy a large proportion. Change detection methods for HSIs must address 
+the problems of high dimensionality, mixed pixel s, high computational cost, and a limited training 
+dataset. Effective AI algorithms can be employed to solve these problems and have been proved to 
+achieve satisfactory performance [36–39]. 
+Multispectral images can be acquired economically and stably, with spatial resolution r anging 
+from low to high. They can provide rich colors, textures, and other properties. Images with high 
+spatial resolution or very high spatial resolution  (10 to 100 cm/pixel ) can also reflect the structure 
+information of the ground objects  [40]. Consequently, they are widely used for change detection.  
+Specifically, the most commonly used types of multispectral images for AI -based change detection 
+methods are derived from the Landsat series of satellites [41–65] and the Sentinel series of satellites 
+[66,67], due to their low acquisition cost and high time and space coverage. In addition, other satellites, 
+such as Quickbird [68–74], SPOT series [75–78], Gaofen series [14,79,80], Worldview series [81–85], 
+provide high and very high spatial resolution images, and various aircrafts provide very high spatial 
+resolution aerial images [20,86–94], allowing the change detection results to retain more details of the 
+changes. 
+A panchromatic image has only one band (i.e., black and white band),  and usually contains a 
+couple of hundred nanometer bandwidth. The bandwidth enables it to hold a high signal–noise ratio, 
+making the panchromatic data available at a high and very  high spatial resolution.  Therefore, 
+panchromatic images are usually fused with multispectral images to obtain rich er spectral 
+information and spatial information for change detection with high and very high spatial resolution. 
+In addition, they can be used directly for change detection [95]. 
+Figure 4. Examples of hyperspectral, multispectral, and panchromatic images, where the hyperspectral
+image is from Indian Pines; multispectral and panchromatic images are from Quickbird.
+A panchromatic image has only one band (i.e., black and white band), and usually contains a
+couple of hundred nanometer bandwidth. The bandwidth enables it to hold a high signal—noise
+ratio, making the panchromatic data available at a high and very high spatial resolution. Therefore,
+panchromatic images are usually fused with multispectral images to obtain richer spectral information
+and spatial information for change detection with high and very high spatial resolution. In addition,
+they can be used directly for change detection [95].
+Optical RS images are widely utilized for change detection as they provide abundant spectral
+and spatial information. However, optical sensors rely upon the sun’s illumination and the used
+wavelength is close to visible light or 1 mm. Therefore, they are often aﬀected by solar radiation and
+clouds. SAR, on the other hand, uses a wavelength of 1 cm to 1 m and has its own illumination source.
+Thus, it can image at both day and night, in almost all weather conditions.
+[IMAGE TEXT - 1]: ZZ CSGL_BZy’ re — Sea Se IF Me op “ — BE PS. ee $A ol RE me ie a oo Opn ee Cx. es 1 I a” a? a: poe i 44 S hae Seed ZZ Fae aR tae oF : oN C>- OS ara <7 > 2 ig , 7. ew x Ao hoe ad ee, oF 200 bands, 4 bands, 1 band, 20 m spatial resolution 2.4 m spatial resolution 0.6 m spatial resolution 4 100 = 100 = 100 00 60080010 12001400 1600 1800 20 2200 2400 a a a Lr a ee a a eT) Hyperspectral Multispectral Panchromatic en —— _
+
+=== Page 8 ===
+Remote Sens. 2020, 12, 1688 8 of 35
+3.1.2. SAR Images
+SAR is a technique which uses signal processing to improve the resolution beyond the limitation
+of physical antenna aperture [96]. The sensor is mounted on an aircraft or a satellite, and is used to
+make a high-resolution image of the earth’s surface. SAR is independent of atmospheric and sunlight
+condition, so it has become a valuable source of information in change detection. With the development
+of SAR imaging technology, multi-platform, multi-band, multi-polarization SAR images provide more
+abundant data sources for change detection tasks. However, SAR images always suﬀer from the eﬀect
+of speckle noises, which results in a more diﬃcult process of change detection than optical RS images.
+Their three key problems include: (1) suppressing speckle noise; (2) designing a change metric or a
+change indicator; and (3) using a threshold or a classiﬁer based on a change metric to generate a ﬁnal
+change map. Change detection methods using AI techniques, especially an autoencoder (AE) [ 97–107]
+and a convolutional neural network (CNN) [108–114], to suppress speckle noise and extract features has
+been proven to be the state of the art. In the overall process and framework of methods,they are similar
+to the methods based on optical RS images, and the detailed framework and AI model introduction are
+analyzed in Sections 4 and 5.
+3.1.3. Street View Images
+Unlike optical RS and SAR images, street view images are captured at eye-level instead of
+overhead. They provide more detailed information in relatively small areas and at more observation
+angles, which can be used for dynamic or real-time change detection. Change detection based on
+street view images focuses on changes in the dynamic urban visual landscape, such as the addition or
+removal of speciﬁc landmarks, pedestrians, vehicles, and other roadside buildings.
+A critical challenge is on how to identify noisy changes caused by various illuminations, camera
+viewpoints, occlusions, and shadows in detecting changes using street view images. These noisy
+changes are interwoven with semantic changes, making it diﬃcult to deﬁne and measure the wanted
+semantic changes in street view images. Thus, using AI algorithms, mainly CNN [115–120], to learn
+deep features for change detection, requires street view images that have been spatially registered.
+3.1.4. Combining Heterogeneous Data
+According to whether the source of multi-period data is the same, the change detection methods
+can be divided into homogeneous data change detection and heterogeneous data change detection.
+Homogeneous data comes from the same type of sensors, and they have the same properties, spectral
+distribution, and feature space, while heterogeneous data come from di ﬀerent types of sensors,
+they have diﬀerent properties and feature spaces, so they cannot be analyzed directly for diﬀerence
+image. Although change detection using heterogeneous data is more challenging, it has fewer
+restrictions on the type of input data and can be used in more situations. Di ﬀerent sensors can
+complement each other to provide richer information on ground objects. For example, using optical RS
+images and SAR images for change detection, the former can provide rich texture information, while the
+latter can be acquired without atmospheric restrictions. It can be used for emergency change detection
+in areas where data are insuﬃcient or disasters occur. Much work on this issue has been proposed
+that uses AI methods to detect changes in SAR and optical RS images [ 16,66,121–127]. In addition,
+GIS maps [128], point cloud data [91], DEMs [129,130], and digital surface models (DSMs) [131] are
+used in combination with optical RS images or SAR images for change detection. These di ﬀerent data
+types can satisfy diﬀerent application requirements and are selected according to the actual situation.
+3.2. Open Data Sets
+Currently, there are some freely available data sets for change detection, which can be used as
+benchmark datasets for AI training and accuracy evaluation in future research. Detailed information is
+presented in Table 1.
+=== Page 9 ===
+Remote Sens. 2020, 12, 1688 9 of 35
+It can be seen that the amount of open datasets that can be used for change detection tasks is
+small, and some of them have small data sizes. At present, there is still a lack of large SAR datasets that
+can be used for AI training. Most AI-based change detection methods are based on several SAR data
+sets that contain limited types of changes, e.g., the Bern dataset, the Ottawa dataset, the Yellow River
+dataset, and the Mexico dataset [24,103], which cannot meet the needs of change detection in areas
+with complex land cover and various change types. Moreover, their labels are not freely available.
+Street-view datasets are generally used for research of AI-based change detection methods in computer
+vision (CV). In CV , change detection based on pictures or video is also a hot research ﬁeld, and the
+basic idea is consistent with that based on RS data. Therefore, in addition to street view image datasets,
+several video datasets in CV can also be used for research on AI-based change detection methods, such
+as CDNet 2012 [132] and CDNet 2014 [133]. Since they belong to the research ﬁeld of video analysis,
+this paper will not review them in more detail. Those interested can refer to [132–134].
+Table 1. A list of open datasets for change detection.
+Type Data Set Description
+Optical RS
+Hyperspectral change detection
+dataset [135]
+3 diﬀerent hyperspectral scenes acquired by AVIRIS or
+HYPERION sensor, with 224 or 242 spectral bands,
+labeled 5 types of changes related with crop transitions
+at pixel level.
+River HSIs dataset [39] 2 HSIs in Jiangsu province, China, with 198 bands,
+labeled as changed and unchanged at pixel level.
+HRSCD [136]
+291 co-registered pairs of RGB aerial images, with
+pixel-level change and land cover annotations, providing
+hierarchical level change labels, for example, level 1
+labels include ﬁve classes: no information, artiﬁcial
+surfaces, agricultural areas, forests, wetlands, and water.
+WHU building dataset [88] 2-period aerial images containing 12,796 buildings,
+provided along with building vector and raster maps.
+SZTAKI Air change benchmark
+[137,138]
+13 aerial image pairs with 1.5 m spatial resolution,
+labeled as changed and unchanged at pixel level.
+OSCD [139] 24 pairs of multispectral images acquired by Sentinel-2,
+labeled as changed and unchanged at pixel level.
+Change detection dataset [140]
+4 pairs of multispectral images with diﬀerent spatial
+resolutions, labeled as changed and unchanged at
+pixel level.
+MtS-WH [141]
+2 large-size VHR images acquired by IKONOS sensors,
+with 4 bands and 1 m spatial resolution, labeled 5 types
+of changes (i.e., parking, sparse houses, residential
+region, and vegetation region) at scene level.
+ABCD [92]
+16,950 pairs of RGB aerial images for detecting washed
+buildings by tsunami, labeled damaged buildings at
+scene level.
+xBD [142]
+Pre- and post-disaster satellite imageries for building
+damage assessment, with over 850,000 building
+polygons from 6 disaster types, labeled at pixel level
+with 4 damage scales.
+AICD [143]
+1000 pairs of synthetic aerial images with artiﬁcial
+changes generated with a rendering engine, labeled as
+changed and unchanged at pixel level.
+Database of synthetic and real
+images [144]
+24,000 synthetic images and 16,000 fragments of real
+season-varying RS images obtained by Google Earth,
+labeled as changed and unchanged at pixel level.
+=== Page 10 ===
+Remote Sens. 2020, 12, 1688 10 of 35
+Table 1. Cont.
+Type Data Set Description
+Street view
+VL-CMU-CD [145]
+1362 co-registered pairs of RGB and depth images,
+labeled ground truth change (e.g., bin, sign, vehicle,
+refuse, construction, traﬃc cone, person/cycle, barrier)
+and sky masks at pixel level.
+PCD 2015 [119]
+200 panoramic image pairs in "TSUNAMI" and "GSV"
+subset, with the size of 224 ×1024 pixels, label as
+changed and unchanged at pixel level.
+Change detection dataset [146]
+Image sequences of city streets captured by a
+vehicle-mounted camera at two diﬀerent time points,
+with the size of 5000 ×2500 pixels, labeled 3D scene
+structure changes at pixel level.
+4. General AI-Based Change Detection Frameworks
+The input of the change detection task is multi-temporal data, which are homogeneous or
+heterogeneous data in two or more periods. According to the deep feature extraction or latent feature
+representation learning process of the bi-temporal data, the AI-based change detection frameworks
+can be summarized into three types: single-stream, double-stream, and multi-model integrated.
+In addition, we further analyze their unsupervised scheme in these frameworks, which is a very
+important and challenging research issue in AI.
+4.1. Single-Stream Framework
+There are two main types of single-stream framework structures for AI-based change detection,
+as shown in Figure 5, namely a direct classiﬁcation structure and a mapping transformation-
+based structure.
+Remote Sens. 2020, 12, x FOR PEER REVIEW 10 of 36 
+ 
+OSCD [139] 
+24 pairs of multispectral images acquired by 
+Sentinel-2, labeled as changed and unchanged 
+at pixel level. 
+Change detection dataset 
+[140] 
+4 pairs of multispectral images with different 
+spatial resolutions, labeled as changed and 
+unchanged at pixel level. 
+MtS-WH [141] 
+2 large-size VHR images acquired by IKONOS 
+sensors, with 4 bands and 1 m spatial 
+resolution, labeled 5 types of changes (i.e., 
+parking, sparse houses, residential region, and 
+vegetation region) at scene level. 
+ABCD [92] 
+16,950 pairs of RGB aerial images for detecting 
+washed buildings by tsunami, labeled damaged 
+buildings at scene level. 
+xBD [142] 
+Pre- and post-disaster satellite imageries for 
+building damage assessment, with over 850,000 
+building polygons from 6 disaster types, 
+labeled at pixel level with 4 damage scales. 
+AICD [143] 
+1000 pairs of synthetic aerial images with 
+artificial changes generated with a rendering 
+engine, labeled as changed and unchanged at 
+pixel level. 
+Database of synthetic and 
+real images [144] 
+24,000 synthetic images and 16,000 fragments of 
+real season-varying RS images obtained by 
+Google Earth, labeled as changed and 
+unchanged at pixel level. 
+Street view 
+VL-CMU-CD [145] 
+1362 co-registered pairs of RGB and depth 
+images, labeled ground truth change (e.g., bin, 
+sign, vehicle, refuse, construction, traffic cone, 
+person/cycle, barrier) and sky masks at pixel 
+level. 
+PCD 2015 [119] 
+200 panoramic image pairs in "TSUNAMI" and 
+"GSV" subset, with the size of 224 × 1024 pixels, 
+label as changed and unchanged at pixel level. 
+Change detection dataset 
+[146]  
+Image sequences of city streets captured by a 
+vehicle-mounted camera at two different time 
+points, with the size of 5000 × 2500 pixels, 
+labeled 3D scene structure changes at pixel 
+level. 
+They usually only need a core AI model to achieve change detection, so they can be regarded as 
+a single-stream structure. It is worth noting that, in practice, some studies have made improvements 
+based on these structures to meet specific change detection purposes, and a detailed analysis is given 
+below. 
+  
+(a) (b) 
+Figure 5. Schematic diagram of single-stream framework structures of AI-based change detection:
+(a) the direct classiﬁcation structure; (b) the mapping transformation-based structure.
+They usually only need a core AI model to achieve change detection, so they can be regarded as a
+single-stream structure. It is worth noting that, in practice, some studies have made improvements
+based on these structures to meet speciﬁc change detection purposes, and a detailed analysis is
+given below.
+4.1.1. Direct Classiﬁcation Structure
+The direct classiﬁcation methods use various data processing approaches to fuse the two or more
+periods of data into intermediate data, and a single AI-based classiﬁer is then used to perform feature
+learning and achieve two or multiple classiﬁcations of the fusion data. That is, as shown in Figure 5a,
+this structure converts the change detection task into a classiﬁcation task, also known as a two-channel
+structure in some of the literature [108,147]. Its two key research issues are the choice of data fusion
+approach and AI-based classiﬁer.
+[IMAGE TEXT - 1]: Data at time T; Fusion Change map Data at time T,
+
+[IMAGE TEXT - 2]: Data at Mapping Transformated time T; MaPPINE data at time T; transformation Decision Change maker map Data at time T,
+
+=== Page 11 ===
+Remote Sens. 2020, 12, 1688 11 of 35
+To obtain the fusion data from multi-period data, the two most common approaches are using
+change analysis methods and direct concatenation. Change analysis methods, such as CVA [ 47],
+diﬀerencing by log-ratio operator [18,148] or change measures [103,149], are able to directly provide
+change intensity information (i.e., the di ﬀerence data) in multitemporal data, which can highlight
+change information and facilitate change detection. The direct concatenation method can retain all
+the information of the multi-period data, so the change information is extracted by the subsequent
+classiﬁer. In general, the one-dimensional input data is directly concatenated [ 24,42,101,150–152],
+while the two-dimensional data is concatenated by channel [111,112,153,154]. Moreover, the fusion of
+original data and diﬀerence data [21,99] is another good strategy, which can keep all the information
+while highlighting the diﬀerence information.
+The classiﬁer uses AI techniques to classify the fused data into two types (i.e., changed or
+unchanged) or multiple types (diﬀerent types of changes) [77]. Its performance and related training
+data are the key to ﬁnally obtaining satisfactory change maps. More details are reviewed in Section 5.
+4.1.2. Mapping Transformation-Based Structure
+The mapping transformation-based framework structure is usually used to detect changes in
+diﬀerent domains or heterogeneous data. Its main idea is to use the AI method to learn the feature
+mapping transformation, and use it to perform feature transformation on one kind of data, as shown
+in Figure 5b. The transformed features correspond to the features of another kind of data. In short,
+it transforms data from one feature space to another feature space. Finally, the change map can be
+obtained by performing decision analysis on the corresponding features of the two kinds of data.
+In [16], a mapping neural network (MNN) is designed to learn the mapping function between the
+multi-spatial-resolution data, and the feature similarity analysis is then implemented to build a change
+map. This method also achieves change detection between SAR and optical images. In [60], the authors
+use an ANN to achieve relative radiometric normalization, and then detect changes of the two-period
+data under the same radiation condition. Moreover, using this idea of mapping transformation, several
+improved structures have been proposed for detecting changes in heterogeneous data [121–124] or
+diﬀerent domain data [10].
+4.2. Double-Stream Framework
+Since the change detection task is usually based on two periods of data, that is, two inputs,
+the double-stream structure is very common for change detection and can be summarized into three
+types, as shown in Figure 6. They are a siamese structure, a transfer learning-based structure, and a
+post-classiﬁcation structure.
+4.2.1. Siamese Structure
+As shown in Figure 6a, the Siamese structure generally consists of two sub-networks with the same
+structure, i.e., feature extractors, which convert the input two-period data into feature maps. Finally,
+the change map is obtained by using change analysis (i.e., decision maker). The main advantage of this
+structure is that its two sub-networks are directly trained at the same time to learn the deep features of
+the input two-period data.
+According to whether the weights of sub-networks are shared, this can be divided into the
+pure-Siamese structure [ 22,68,94,117,155,156] and the pseudo-Siamese structure [ 79,109,157,158].
+The main diﬀerence is that the former sub-network extracts the common features of the two-period data
+by sharing weights. The latter sub-network extracts features corresponding input data, respectively,
+resulting in an increase in the number of trainable parameters and complexity, but also in its ﬂexibility.
+Similarly, the authors of [159] designed a triple network consisting of three sub-networks with sharing
+weights for change detection.
+=== Page 12 ===
+Remote Sens. 2020, 12, 1688 12 of 35
+Remote Sens. 2020, 12, x FOR PEER REVIEW 12 of 36 
+ 
+  
+(a) 
+ 
+(b) 
+ 
+ 
+(c) 
+Figure 6. Schematic diagram of double-stream framework structure of AI-based change detection: (a) 
+the Siamese structure; (b) the transfer-learning-based structure; (c) the post-classification structure. 
+4.2.1. Siamese Structure 
+As shown in Figure 6a, the Siamese structure generally consists of two sub -networks with the 
+same structure, i.e., feature extractors, which convert the input two -period data into feature maps. 
+Finally, the change map is obtained by using change analysis (i.e., decision maker).  The main 
+advantage of this structure is that its two sub-networks are directly trained at the same time to learn 
+the deep features of the input two-period data. 
+According to whether the weights of sub-networks are shared, this can be divided into the pure-
+Siamese structure [22,68,94,117,155,156] and the pseudo-Siamese structure [79,109,157,158]. The main 
+difference is that the former sub-network extracts the common features of the two -period data by 
+sharing weights . The latter sub-network extracts features corresponding input data , respectively, 
+resulting in an  increase in the number of trainable parameters and complexity, but also  in its 
+flexibility. Similarly, the authors of [159] designed a triple network consisting of three sub-networks 
+with sharing weights for change detection. 
+Although this structure enables the  feature extractor to directly learn de ep features by 
+supervised training with labeled  samples, unsupervised training is more challenging. A common 
+solution is to train feature extractors individually in an unsupervised manner  [105–107,160]. These 
+pre-trained feature extractors provide the latent representation of the original data (i.e., feature maps) 
+for further change detection. To generate change maps, the output feature maps in the two periods 
+can be directly classified by the concatenation of channels [91,155,161] or can be used to produce 
+difference map s using a certain distance metric  [9], and then used for further change analysis 
+[162,163]. To retain multi -scale change information, feature map s at different depths can be 
+concatenated for change detection [164–167], and this works well. 
+4.2.2. Transfer Learning-Based Structure 
+The transfer learning-based structure is proposed to alleviate the lack of training samples  and 
+optimize the training process. Transfer learning uses training in one domain to enable better results 
+in another domain and, specifically, the lower to midlevel features learned in the original domain can 
+be transferred as useful features in the new domain [13]. The pre -trained AI model, as a feature 
+extractor, is used to generate feature maps for two periods , and the feature extractors of the two 
+periods can be the same, as shown in Figure 6b. Whether the pre-trained model can correctly extract 
+the deep feature map or latent feature representation of the input data  determines the performance 
+of the change detection task. 
+Figure 6. Schematic diagram of double-stream framework structure of AI-based change detection:
+(a) the Siamese structure; (b) the transfer-learning-based structure; (c) the post-classiﬁcation structure.
+Although this structure enables the feature extractor to directly learn deep features by supervised
+training with labeled samples, unsupervised training is more challenging. A common solution is
+to train feature extractors individually in an unsupervised manner [105–107,160]. These pre-trained
+feature extractors provide the latent representation of the original data (i.e., feature maps) for further
+change detection. To generate change maps, the output feature maps in the two periods can be directly
+classiﬁed by the concatenation of channels [ 91,155,161] or can be used to produce di ﬀerence maps
+using a certain distance metric [ 9], and then used for further change analysis [ 162,163]. To retain
+multi-scale change information, feature maps at di ﬀerent depths can be concatenated for change
+detection [164–167], and this works well.
+4.2.2. Transfer Learning-Based Structure
+The transfer learning-based structure is proposed to alleviate the lack of training samples and
+optimize the training process. Transfer learning uses training in one domain to enable better results in
+another domain and, speciﬁcally, the lower to midlevel features learned in the original domain can be
+transferred as useful features in the new domain [13]. The pre-trained AI model, as a feature extractor,
+is used to generate feature maps for two periods, and the feature extractors of the two periods can
+be the same, as shown in Figure 6b. Whether the pre-trained model can correctly extract the deep
+feature map or latent feature representation of the input data determines the performance of the change
+detection task.
+The transfer learning-based structure usually has two training phases, namely the deep feature
+learning phase and the ﬁne-tuning phase. In the deep feature learning phase, the AI model is
+usually supervised, pre-trained with su ﬃcient labeled samples in other domain data [ 67,110,168].
+The ﬁne-tuning phase is optional and, in this phase, only a small number of labeled samples are
+required for ﬁne-tuning [125,169–172] or additional classiﬁer training [90,140]. Therefore, the change
+map can be directly obtained by the trained classiﬁer. Without ﬁne-tuning, ﬁnal change maps can be
+obtained based on the two-period feature maps using change analysis, such as low rank analysis [173],
+CVA [72], clustering [73,82], and threshold [119,174]. This means that no more labeled samples are
+needed for further training. Moreover, based on the idea of transfer learning, the pre-trained AI model
+can also be used to generate training samples or masks to achieve the unsupervised scheme [ 78],
+which is a very practical strategy.
+[IMAGE TEXT - 1]: e aie * Feature ime T; extractor Decision Change maker map Data at Feature time T, extractor
+
+[IMAGE TEXT - 2]: Data at Restiente time T, Feature maps at , extractor time T; Decision Change maker map Data at stare time T; Feature maps at 2 extractor time T2
+
+[IMAGE TEXT - 3]: time 7; Classifer We 1 so Change Comparison ee map time T, Classifer a
+
+=== Page 13 ===
+Remote Sens. 2020, 12, 1688 13 of 35
+4.2.3. Post-Classiﬁcation Structure
+As shown in Figure 6c, the post-classiﬁcation structure consists of two classiﬁers, which can
+usually be converted into classiﬁcation tasks and trained in a joint or independent way. It provides a
+classiﬁcation map for each period data and the change map with change directions can be obtained
+by comparing classiﬁcation maps. Nevertheless, the accuracy of the change detection results of these
+methods depends on the performance of the classiﬁer.
+A number of studies [43,44,52,56,61,70,75,76,131,175,176] have proven that AI techniques increase
+the accuracy of land-cover classiﬁcation to a notable level and the results can be further used for
+change detection. By converting the direct geometric or spectral comparison to label changes, the
+post-classiﬁcation structure can be regarded as a very general and practical structure, and it provides a
+type change matrix. Advantageously, it works robustly for data acquired under diﬀerent acquisition
+conditions (illumination condition, sensor attitude, season, etc.) or even diﬀerent sensors [45,50,62,130].
+Supervised training of the AI-based classiﬁer requires a large number of training samples, which can
+be generated by existing GIS data representing land cover [128] or thematic maps [177].
+4.3. Multi-Model Integrated Structure
+Many works have integrated multiple AI models to improve the performance of change detection
+methods. Considering the large number and complex structure, only a representative structure is
+summarized, as shown in Figure 7.
+Remote Sens. 2020, 12, x FOR PEER REVIEW 13 of 36 
+ 
+The transfer learning-based structure usually has two training phases, namely the deep feature 
+learning phase and the fine-tuning phase. In the deep feature learning phase, the AI model is usually 
+supervised, pre-trained with sufficient labeled samples in other domain data  [67,110,168]. The fine-
+tuning phase is optional and, in this phase, only a small number of labeled samples are required for 
+fine-tuning [125,169–172] or additional classifier training [90,140]. Therefore, the change map can be 
+directly obtained by the trained class ifier. Without fine-tuning, final change maps can be obtained 
+based on the two-period feature maps using change analysis, such as low rank analysis [173], CVA 
+[72], clustering [73,82], and threshold [119,174]. This means that no more labeled samples are needed 
+for further training. Moreover, based on the idea of transfer learning, the pre-trained AI model can 
+also be used to generate training samples or masks to achieve the unsupervised scheme [78], which 
+is a very practical strategy. 
+4.2.3. Post-Classification Structure 
+As shown in  Figure 6c, the post-classification structure consists of two classifiers, which can 
+usually be converted into classification tasks and trained in a joint or independent way. It provides a 
+classification map for each period data and the change map with change directions can be obtained 
+by comparing classification maps. Nevertheless, the accuracy of the change detection results of these 
+methods depends on the performance of the classifier.  
+A number of studies  [43,44,52,56,61,70,75,76,131,175,176] have proven that AI techniques 
+increase the accuracy of land-cover classification to a notable level and the results can be further used 
+for change detection. By converting the direct geometric or spectral comparison to label changes, the 
+post-classification structure can be regarded as a very general and practical structure, and it provides 
+a type change matrix . Advantageously, it works robustly for data acquired under different 
+acquisition conditions (illumination condition, sensor attitude, season, etc.) or even different sensors 
+[45,50,62,130]. Supervised training of the AI -based classifier requires a large number of training 
+samples, which can be generated by existing GIS data representing land cover [128] or thematic maps 
+[177].  
+4.3. Multi-Model Integrated Structure 
+Many works have integrated multiple AI models to improve the performance of change 
+detection methods. Considering the large number and complex structure, only a representative 
+structure is summarized, as shown in Figure 7. 
+ 
+Figure 7. Schematic diagram of multi-model integrated structure of AI-based change detection. 
+The multi-model integrated  framework is a hybrid structure, which is similar to the double 
+stream structure, but it contains more types of AI models and can also be trained in  multiple stages. 
+Change detection is a spatiotemporal analysis and can be achieved by acquiring the spatial–spectral 
+features through a n AI-based feature extractor as a spectral -spatial module, and then modeling 
+temporal dependency through an AI-based classifier as a temporal module [14,38,53,74]. Moreover, 
+this hybrid structure is skillfully used for unsupervised change detection [100] and object-level 
+change detection  [87]. This makes the whole change detection process more complicated while 
+improving performance. 
+Figure 7. Schematic diagram of multi-model integrated structure of AI-based change detection.
+The multi-model integrated framework is a hybrid structure, which is similar to the double
+stream structure, but it contains more types of AI models and can also be trained in multiple stages.
+Change detection is a spatiotemporal analysis and can be achieved by acquiring the spatial–spectral
+features through an AI-based feature extractor as a spectral-spatial module, and then modeling
+temporal dependency through an AI-based classiﬁer as a temporal module [14,38,53,74]. Moreover,
+this hybrid structure is skillfully used for unsupervised change detection [ 100] and object-level
+change detection [ 87]. This makes the whole change detection process more complicated while
+improving performance.
+4.4. Unsupervised Schemes in Change Detection Frameworks
+AI-based change detection frameworks usually include feature extractors or classiﬁers,
+which require supervised and unsupervised training. Since obtaining a large number of labeled
+samples for supervised training is usually time-consuming and labor-intensive, many e ﬀorts have
+been made to achieve AI-based change detection in an unsupervised or semi-supervised manner.
+As introduced in Section 4.2.2, transfer learning can reduce or even eliminate the need for training
+samples, but these are not pure unsupervised schemes, as samples from other domains are required.
+In addition, the most commonly used unsupervised scheme is to use the change analysis method and
+[IMAGE TEXT - 1]: Data at : Feature : Feature maps at time T; - . extractor time T; y =——Ci Change Classifier map yO eature Data at a Feature maps at time T2 . extractor time Tz
+
+=== Page 14 ===
+Remote Sens. 2020, 12, 1688 14 of 35
+sample selection strategy to select absolute changed or /and unchanged as training samples for AI
+models. Its ﬂow chart is shown in Figure 8a.
+Remote Sens. 2020, 12, x FOR PEER REVIEW 14 of 36 
+ 
+4.4. Unsupervised Schemes in Change Detection Frameworks 
+AI-based change detection frameworks usually include feature extractors or classifiers, which 
+require supervised and unsupervised training. Since obtaining a large number of labeled samples for 
+supervised training is usually time-consuming and labor-intensive, many efforts have been made to 
+achieve AI-based change detection in an unsupervised or semi-supervised manner. As introduced in 
+Section 4.2.2, transfer learning can reduce or even eliminate the need for training samples, but these 
+are not pure unsupervised schemes , as samples from other domains are required. In addition, t he 
+most commonly used unsupervised scheme is to use the  change analysis method and sample 
+selection strategy to select absolute changed or/and unchanged as training samples for AI models. Its 
+flow chart is shown in Figure 8a.  
+  
+(a) (b) 
+Figure 8. Flow chart of the most commonly used unsupervised schemes. 
+It can be seen that there are two change detection stages in this scheme. The first stage, i.e., pre-
+classification, is usually simple but worth studying, and most of them are unsupervised methods, 
+which can be implemented with difference analysis and clustering [101], such as K-means [162], fuzzy 
+c-means ( FCM) [90,99,100,111,151,160,165,178–181], spatial FCM [102,154], or hierarchical FCM 
+[21,113]. This stage in some works are implemented by threshold analysis [18,39], saliency analysis 
+[78], or well -designed rules [38,83,84,124,148,182,183]. After obtaining high-confidence changed 
+or/and unchanged samples, the AI model can be trained in a supervised manner for change detection 
+in the second stage. Moreover, another commonly used unsupervised scheme is based on the latent 
+change map , as shown in Figure 8b. In addition to the pre -trained model obtained by transfer 
+learning, it can be generated by an unsupervised  AI model (e.g., AE s), and the final change map is 
+then generated by using a clustering algorithm [23,79,98,107,157,163,184]. 
+Although unsupervised change detection does not require labeled training samples, sometimes 
+the lack of prior knowledge makes it unsuitable for change detection involving semantic information. 
+Weakly and semi -supervised schemes use inaccurate or insufficient labeled samples as a priori 
+knowledge to solve this problem, which can be implemented with label aggregation [97], iterative 
+learning [58,185], deep generative models [186] (see Section 5.6 for a more detailed review), sample 
+generation strategies [156], or novel cost functions [36,187]. 
+5. Mainstream Networks in AI 
+Section 4 summarizes general AI-based change detection frameworks, but the detailed 
+introduction of their feature extractors and classifiers are not provided. In this section, the various 
+network structures in AI used for change detection are specifically analyzed. At present, they mainly 
+include autoencoders (AEs), deep belief networks (DBNs), CNNs, recurrent neural networks (RNNs), 
+pulse couple neural networks (PCNNs), and generative adversarial networks (GANs), as can be seen 
+in Figure 9. In addition, other networks or methods in AI used for change detection have also been 
+summarized briefly. 
+Figure 8. Flow chart of the most commonly used unsupervised schemes, (a) use the change analysis
+method and sample selection strategy, (b) base on the latent change map.
+It can be seen that there are two change detection stages in this scheme. The ﬁrst stage, i.e., pre-
+classiﬁcation, is usually simple but worth studying, and most of them are unsupervised methods,
+which can be implemented with di ﬀerence analysis and clustering [ 101], such as K-means [ 162],
+fuzzy c-means (FCM) [ 90,99,100,111,151,160,165,178–181], spatial FCM [ 102,154], or hierarchical
+FCM [21,113]. This stage in some works are implemented by threshold analysis [ 18,39], saliency
+analysis [ 78], or well-designed rules [ 38,83,84,124,148,182,183]. After obtaining high-conﬁdence
+changed or/and unchanged samples, the AI model can be trained in a supervised manner for change
+detection in the second stage. Moreover, another commonly used unsupervised scheme is based on the
+latent change map, as shown in Figure 8b. In addition to the pre-trained model obtained by transfer
+learning, it can be generated by an unsupervised AI model (e.g., AEs), and the ﬁnal change map is
+then generated by using a clustering algorithm [23,79,98,107,157,163,184].
+Although unsupervised change detection does not require labeled training samples, sometimes
+the lack of prior knowledge makes it unsuitable for change detection involving semantic information.
+Weakly and semi-supervised schemes use inaccurate or insu ﬃcient labeled samples as a priori
+knowledge to solve this problem, which can be implemented with label aggregation [ 97], iterative
+learning [58,185], deep generative models [186] (see Section 5.6 for a more detailed review), sample
+generation strategies [156], or novel cost functions [36,187].
+5. Mainstream Networks in AI
+Section 4 summarizes general AI-based change detection frameworks, but the detailed introduction
+of their feature extractors and classiﬁers are not provided. In this section, the various network structures
+in AI used for change detection are speciﬁcally analyzed. At present, they mainly include autoencoders
+(AEs), deep belief networks (DBNs), CNNs, recurrent neural networks (RNNs), pulse couple neural
+networks (PCNNs), and generative adversarial networks (GANs), as can be seen in Figure 9.In addition,
+other networks or methods in AI used for change detection have also been summarized brieﬂy.
+5.1. Autoencoder
+The basic structure of the AE is shown in Figure 9a. It mainly includes two parts: an encoder and
+a decoder. The encoder encodes the input vector x to get latent features h(x), which can be formulated
+as: h(x) = f(Wx + b). The decoder, which can be formulated as: ˜x = f(W′h(x) + b′), reconstructs the
+learned latent features to output a vector ˜x that should be as close as possible to the original x. W and
+b are trainable parameters and can be obtained through unsupervised schemes. Intuitively, an AE can
+be used for feature dimensionality reduction, similar to PCA, but its performance is better due to the
+strong feature learning capabilities of the neural network. Thus, it is widely used in change detection
+tasks as the feature extractor. The commonly used AE models are stacked AEs [ 97,98,104], stacked
+denoising AEs [16,101,106,121–123,151,160,188], stacked ﬁsher AEs [189], sparse AEs [80], denoising
+[IMAGE TEXT - 1]: Uncertain time T, analysis Al model map Data at
+
+[IMAGE TEXT - 2]: Data at time T, Gerent Change Change Al model cnanee analysis map map Data at time T,
+
+=== Page 15 ===
+Remote Sens. 2020, 12, 1688 15 of 35
+AEs [102], fuzzy AEs [ 105], and contractive AEs [ 99,103]. These AEs preserve spatial information
+by expanding pixel neighborhoods into vectors, while convolutional AEs are implemented directly
+through convolution kernels [170,190]. According to its characteristics, AEs can be used to implement
+change detection in an unsupervised manner and perform well.
+Remote Sens. 2020, 12, x FOR PEER REVIEW 15 of 36 
+ 
+  
+(a) 
+ 
+(b) 
+ 
+  
+(c) 
+ 
+(d) 
+ 
+ 
+ 
+(e) (f) 
+Figure 9. Schematic diagram of general network architectures in AI used for change detection : (a) 
+autoencoder ( AE); ( b) deep belief network (DBN) ; ( c) convolutional neural network ( CNN); ( d) 
+recurrent neural network (RNN); (e) pulse couple neural network (PCNN); (f) generative adversarial 
+networks (GANs). 
+5.1. Autoencoder  
+The basic structure of the AE is shown in Figure 9a. It mainly includes two parts: an encoder and 
+a decoder. The encoder encodes the input vector  𝒙  to get latent features  𝒉(𝒙), which can be 
+formulated as: 𝒉(𝒙) = 𝒇(𝑾𝒙 + 𝒃). The decoder, which can be formulated as:  𝒙̃ = 𝒇(𝑾′𝒉(𝒙) + 𝒃′), 
+reconstructs the learned latent features to output a vector 𝒙̃ that should be as close as possible to the 
+original 𝒙. 𝑾 and 𝒃 are trainable parameters and can be obtained through unsupervised schemes. 
+Intuitively, an AE can be used for feature dimensionality reduction, similar to PCA, but its 
+performance is better due to the strong feature learning capabilities of the neural network. Thus, it is 
+widely used in change detection tasks as the feature extractor. The commonly used AE models are 
+stacked AEs [97,98,104], stacked denoising AEs [16,101,106,121–123,151,160,188], stacked fisher AEs 
+[189], sparse AEs [80], denoising AEs [102], fuzzy AEs [105], and contractive AEs [99,103]. These AEs 
+preserve spatial information by expanding pixel neighborhoods into vectors, while convolutional 
+AEs are implemented directly through convolution kernels [170,190]. According to its characteristics, 
+AEs can be used to implement change detection in an unsupervised manner and perform well. 
+5.2. Deep Belief Network 
+A DBN is a generative graphical model and learns to probabilistically reconstruct its inputs. It 
+can be formed by stacking multiple simple and unsupervised networks such as restricted Boltzmann 
+machines (RBMs) or AEs. As shown in Figure 9b, a DBN consists of multiple layers of hidden units, 
+Figure 9. Schematic diagram of general network architectures in AI used for change detection:
+(a) autoencoder (AE); ( b) deep belief network (DBN); ( c) convolutional neural network (CNN);
+(d) recurrent neural network (RNN); (e) pulse couple neural network (PCNN); (f) generative adversarial
+networks (GANs).
+5.2. Deep Belief Network
+A DBN is a generative graphical model and learns to probabilistically reconstruct its inputs.It can
+be formed by stacking multiple simple and unsupervised networks such as restricted Boltzmann
+machines (RBMs) or AEs. As shown in Figure 9b, a DBN consists of multiple layers of hidden units,
+with connections between the layers. However, its units within the same layer are not connected to
+each other and each hidden layer serves as the visible layer for the next. As a feature extractor, it can
+be trained greedily, i.e., one layer at a time, and appears in many unsupervised change detection
+methods [23,37,157,183]. On the other hand, the deep Boltzmann machine (DBM), as a graph similar
+to DBN but undirected, can also achieve such a function [182].
+5.3. Convolutional Neural Network
+Deep features extracted by deep neural networks can be divided into two categories according to
+whether spatial relationships are considered. One type uses one-dimensional data as input (e.g., DBNs
+[IMAGE TEXT - 1]: a
+
+[IMAGE TEXT - 4]: o0UCUSDUWUCM a-oeoa e© ee 2
+
+[IMAGE TEXT - 5]: © f I
+
+[IMAGE TEXT - 6]: Input Network: Output: Noises data Generator (G) Fake data Input: Network: Prediction Real data Discriminator (D) Real or fake
+
+=== Page 16 ===
+Remote Sens. 2020, 12, 1688 16 of 35
+and AEs). Their input is a column vector converted from the input image patch that loses the intact
+spatial information. The other uses two-dimensional data as input, considering the spatial relationship
+and its typical representative is CNN. As shown in Figure 9c, it detects features hierarchically through
+local connections and shared weight and is closer to the human visual perception mechanism.For those
+unfamiliar with CNNs, an excellent book by Goodfellow et al. can be found in [191].
+Due to its strong ability to automatically learn deep features, the CNN has achieved a satisfactory
+performance in various image-processing tasks. Many classic CNNs and their improvements are
+used as classiﬁers or feature extractors for change detection, such as VGGNet [78,86,119,140,164,168],
+CaﬀeNet [174], SegNet [192], UNet [169,193], InceptionNet [67], and ResNet [194,195]. Nevertheless,
+most of the network structures in the literature are newly designed, and a CNN, generally, consists
+of an input layer and a series of convolutional layers, pooling layers, activation functions, and fully
+connected layers. However, to achieve special functions, the CNNs integrate some special structures
+for change detection. For instance, the region CNN (R-CNN), primitively designed for object detection
+in CV , contains a region-proposals structure to predict the regions of the changed objects [87,196,197].
+The PCANet, with its convolution ﬁlter banks chosen from PCA ﬁlters, is able to reduce the inﬂuence of
+speckle noise and has been used in SAR image change detection [178,180]. More recent work proposes
+a kernel PCA convolution to extract representative spatial–spectral features from RS images in an
+unsupervised manner [163].
+In conclusion, the use of CNNs enables the change detection method to reach the state of the
+art, but there is no systematic way yet to design and/or train the network, which is a long-standing
+problem in the RS community.
+5.4. Recurrent Neural Network
+Obviously, the input for change detection includes two or more periods of data, so the change
+detection task can be converted into a process of obtaining change information directly from the
+multi-period sequence data. RNN, as a memory network whose input is sequence data, is very suitable
+for this situation. As shown in Figure 9d, its core part is a directed graph that can be unfold to a chain,
+with units (i.e., RNN cells) linked in sequence. An RNN cell has two inputs: one is the current time
+input xt, which is used to update the state in real time, and the other is the state of the hidden layer
+ht−1 at the previous time, which is used to remember the state. The network at diﬀerent times shares
+the same set of parameters F.
+A long short-term memory (LSTM) network, a special RNN that alleviates the problem of gradient
+disappearance and gradient explosion during long sequence training, has been employed as a temporal
+module (see Section 4.3) in change detection tasks [ 14,38,53,64,74]. In [ 51], the authors used an
+improved LSTM network to acquire and record the change information of multi-temporal RS data.
+Advantageously, the trained model could be transferred to other data domains; that is, it has a good
+generalization ability. Further, in [52], based on the same idea, i.e., knowledge transfer, the authors
+propose an RNN-based framework to detect annual urban dynamics of four cities. These methods can
+help to address the problem of temporal spectral variance and insuﬃcient samples in the long-term
+detection of urban change.
+5.5. Pulse Couple Neural Network
+The PCNN is a bionic neural network inspired by the visual cortex of mammals. Unlike traditional
+neural networks, it does not require a learning and training stage to extract eﬀective information from
+very complex backgrounds, which means that it is unsupervised and can easily be used as a feature
+extractor. As shown in Figure 9e, it mainly consists of three parts: a received ﬁeld, a modulation ﬁeld,
+and a pulse generator. A PCNN receives a two-dimensional input image, and each neuron corresponds
+to one pixel in the image. The value of each pixel serves as an external stimulus for each neuron,and its
+connected neighboring neurons provide local stimuli. The external and local stimuli are combined in
+a modulation ﬁeld and a pulse generator to produce a pulsed output. As the number of iterations
+=== Page 17 ===
+Remote Sens. 2020, 12, 1688 17 of 35
+increases, the PCNN generates a pulse sequence that can be used for image segmentation and feature
+extraction [198] and, similarly, for change detection [54,66,71,85,124,199–201].
+5.6. Generative Adversarial Networks
+GANs are algorithmic architectures that use two neural networks, namely, a generator and a
+discriminator, to contest with each other in a game to obtain the best generation and discrimination
+model [202], as shown in Figure 9f. The generator learns to generate plausible data as negative training
+examples for the discriminator, while the discriminator learns to distinguish these fake data from real
+data. Therefore, with a small amount of labeled data (i.e., real data), a well-performed discrimination
+model can be trained for change detection [ 17]. Di ﬀerent from using random Gaussian noises to
+generate fake data [83], the authors of [203] used a CNN-based generator to produce fake diﬀerence
+maps based on the joint distribution of two-period data, which can help to weaken the impact of
+the bad pixels on the network. In [204], the authors designed a W-Net as a generator to decrease the
+network parameters and make them easy to train, and used many manually annotated samples to
+improve the reliability of the results. More recent work [127] proposed a conditional GAN to achieve
+change detection of heterogeneous data, where a translation network and an approximation network
+were used to transform the heterogeneous data into same feature space, and the change map could
+then be obtained by direct comparison. Similarly, a coupling translation network was employed
+in [126]. For mapping landslides, the authors of [93] used a mapping generator to transform the pre-
+and post-landslide images into the same domain, and a Siamese network was then employed to detect
+landslide changes.
+To obtain a well-functioning GAN, the methods need a well-designed loss function and a good
+training strategy; otherwise, the model results may be unsatisfactory due to the freedom of the neural
+network. In addition, real data are needed to ensure the reliability of the network. These are challenges
+that exist in many practical applications.
+5.7. Other Artiﬁcial Neural Networks and AI Methods
+There are many types of artiﬁcial neural networks in AI and the mainstream network structures
+used for change detection are described above. In addition, other networks, such as Hopﬁeld
+networks [ 47,48,65,205–207], back propagation networks [ 42,149,208,209], multilayer perceptrons
+(MLPs) [70,210–214], extreme learning machines [215], and self-organizing map (SOM) networks [55,
+216–221], do not require a large number of training samples to learn high-level abstract features as deep
+neural networks do, but due to their shallow network structure, low sample size requirements, and
+easy training process, they are also widely used in change detection tasks and can achieve satisfactory
+results. Since they can be regarded as traditional machine learning techniques, we will not make more
+detailed comments here due to space limitations and existing reviews [7,222,223].
+In addition to the neural network in AI, there are other AI techniques used for implementing
+change detection. Recently, dictionary learning has been employed, and it focuses on learning internal
+feature representations from datasets [ 141,176,224,225], just like AEs. The cellular automata (CA),
+a spatially and temporally discrete model inspired by cellular behavior, can help to model future
+changes in LULC [ 226] and predict urban spatial expansion [ 227]. The development of these AI
+techniques has signiﬁcantly promoted research on change detection, which helps to develop more
+automatic, intelligent and accurate methods to meet the needs of various applications.
+6. Applications
+In practical applications, according to the change information, the ﬁnal change maps can be
+grouped into four types, namely, binary maps, one-class maps, from–to maps, and instance maps,
+as can been see in Figure 10.
+=== Page 18 ===
+Remote Sens. 2020, 12, 1688 18 of 35
+Remote Sens. 2020, 12, x FOR PEER REVIEW 18 of 36 
+ 
+AI techniques has significantly promoted research on change detection, which helps to develop more 
+automatic, intelligent and accurate methods to meet the needs of various applications. 
+6. Applications 
+In practical applications,  according to the change information, the final change maps  can be 
+grouped into four types, namely, binary maps, one-class maps, from–to maps, and instance maps, as 
+can been see in Figure 10.  
+ 
+Figure 10. Schematic diagram of four change maps. To meet different application requirements, four 
+different change maps can be obtained by detecting the change of the two -period images, i.e., ( a) 
+binary maps, (b) one-class maps, (c) from-to maps, and (d) instance maps. 
+A binary map uses 1 and 0 to indicate change and no change. It contains any changes and cannot 
+provide an additional type of information for the changed ground object. A one-class map provides 
+single-type change information, which indicates the appearance and disappearance of a specific type 
+of ground object. For example, the result of building change detection is a one -class map indicating 
+the addition and removal of buildings, which can be used for urban management [86]. A from–to 
+map provides change transfer information, indicating that the ground object is changed from one 
+type to another, and these change types are determined by the classifier [128]. A change instance map 
+provides boundaries for each  change instance, which can be the result of object -based change 
+detection [89]. These change detection maps can be generated by trained AI models and used in 
+various application s. To demonstrate the future potential application demands and development 
+possibilities of AI -based change detection  techniques, the current attempts  and work in various 
+application fields are summarized in  this section. The development of AI -based change detection 
+techniques has greatly facilitated many applications and has improved their automation and 
+intelligence. Most AI-based change detection generates binary maps, and these studies only focus on 
+the algorithm itself, without a specific application field. Therefore, it can be considered that they are 
+generally suitable for LULC change detection. In this section, we focus on the techniques that are 
+associated with specific applications, and they can be broadly divided into four categories: 
+Figure 10. Schematic diagram of four change maps. To meet diﬀerent application requirements, four
+diﬀerent change maps can be obtained by detecting the change of the two-period images, i.e., (a) binary
+maps, (b) one-class maps, (c) from-to maps, and (d) instance maps.
+A binary map uses 1 and 0 to indicate change and no change. It contains any changes and cannot
+provide an additional type of information for the changed ground object. A one-class map provides
+single-type change information, which indicates the appearance and disappearance of a speciﬁc type
+of ground object. For example, the result of building change detection is a one-class map indicating
+the addition and removal of buildings, which can be used for urban management [ 86]. A from–to
+map provides change transfer information, indicating that the ground object is changed from one
+type to another, and these change types are determined by the classiﬁer [ 128]. A change instance
+map provides boundaries for each change instance, which can be the result of object-based change
+detection [89]. These change detection maps can be generated by trained AI models and used in various
+applications. To demonstrate the future potential application demands and development possibilities
+of AI-based change detection techniques, the current attempts and work in various application ﬁelds
+are summarized in this section. The development of AI-based change detection techniques has greatly
+facilitated many applications and has improved their automation and intelligence. Most AI-based
+change detection generates binary maps, and these studies only focus on the algorithm itself, without
+a speciﬁc application ﬁeld. Therefore, it can be considered that they are generally suitable for
+LULC change detection. In this section, we focus on the techniques that are associated with speciﬁc
+applications, and they can be broadly divided into four categories:
+• Urban contexts: urban expansion, public space management, and building change detection;
+• Resources and environment: human-driven environmental changes, hydro-environmental
+changes, sea ice, surface water, and forest monitoring;
+• Natural disasters: landslide mapping and damage assessment;
+• Astronomy: planetary surfaces.
+[IMAGE TEXT - 1]: First period image Second period image I I I tt tI I I I I I de I I I I td I ft td I I Ii I I eT tt SESE EER EERE 6 6 h6URE OCU II I I I I I tT I I Lt I a I ae Change detection (a) Binary map (b) One-class map (Class 1) (c) From-to map (d) Instance map pixels are colored in black and J unchanged pixels of class 1 arefjand three different type Jf and other various color pixel white respectively. colored in red, green, and transformations are colored inf sroups indicate _ different white respectively. ted (class 3 to class 1), green § change instances. (class 3 to class 2), and blue (class 1 to class 3), respectively. BESS SREE BEER EERE BE e BERR BEE E Ee Be e SRR REE SRR SR Eee SERRE) SERRE) 6c I —6Ll ft I I tt See See SERRE) SERRE Be) Ee SERRE REE SERRE SR Eee Y II Pt ff I I I Y II
+
+=== Page 19 ===
+Remote Sens. 2020, 12, 1688 19 of 35
+We provide an overview of the various change detection techniques in the literature for the
+diﬀerent application categories. The works and data types associated with these applications are listed
+in Table 2.
+Table 2. Summary of main applications of AI-based change detection techniques.
+Applications Data Types
+Urban contexts
+Urban expansion a. Satellite images [52,228]
+b. SAR images [229]
+Public space management Street view images [117]
+Building change detection
+a. Aerial images [86,89,90]
+b. Satellite images [85,192]
+c. Satellite /Aerial images [88,94]
+d. Airborne laser scanning data and aerial
+images [91]
+e. SAR images [112]
+f. Satellite images and GIS map [177]
+Resources & environment
+Human-driven environmental
+changes Satellite images [69]
+Hydro-environmental changes Satellite images [56]
+Sea ice SAR images [171]
+Surface water Satellite images [230,231]
+Forest monitoring Satellite images [45,63,150,196,232]
+Natural disasters
+Landslide mapping a. Aerial images [20,93]
+b. Satellite images [129,214,233]
+Damage assessment
+a. Satellite images (caused by tsunami [190,234],
+particular incident [156], ﬂood [235], or
+earthquake [19])
+b. Aerial images (caused by tsunami [92])
+c. SAR images (caused by ﬁres [104], or
+earthquake [110])
+d. Street view images (caused by tsunami [119])
+e. Street view images and GIS map (caused by
+tsunami [236])
+Astronomy Planetary surfaces Satellite images [170]
+Urbanization is a signiﬁcant factor causing land surface change. As a result of population growth,
+the expansion of urbanization plays an important role in transforming natural land cover into urban
+facilities for people. In [52], the authors proposed a new framework based on transfer learning and
+an RNN for urban area extraction and change detection. Its overall accuracy of single-year urban
+maps is approximately 96% among the four target cities (Beijing, New York, Melbourne, and Munich).
+Using a genetic-algorithm-evolved ANN [ 228] or a CNN [ 229], urban changes were obtained by
+taking the diﬀerence in the predicted urban distribution maps. For public space management, change
+detection based on street view images is a good way to identify the encroachment of public spaces.
+In [117], a CNN-using Siamese structure and transfer learning achieved 98.3% pixel accuracy in the
+VL-CMU-CD dataset. In addition, many studies focus on building changes. Due to the small scale
+of buildings, change detection is usually carried out based on high- or very-high-spatial-resolution
+RS data, such as aerial photos [86,90] and satellite images from Quickbird [192] or Worldview 2 [85].
+However, due to diﬀerences in the experimental data, it is diﬃcult to evaluate which one has the best
+performance. Although some methods are based on the WHU building dataset [ 88], unfortunately,
+their experimental data are diﬀerent with regard to area, which makes it diﬃcult to compare them
+directly. In [89], the authors proposed two CNN models, a mask R-CNN for object-based instance
+segmentation and a multi-scale CNN for pixel-based semantic segmentation, and their intersection
+of union (IoU) accuracy of buildings was more than 0.83. In [ 94], the authors proposed a pyramid
+=== Page 20 ===
+Remote Sens. 2020, 12, 1688 20 of 35
+feature-based attention-guided Siamese network to detect building changes and the IoU of change
+map exceeded 0.97. Sometimes, the problem of constant cloud coverage prevents optical RS images
+from being fully utilized, and SAR data represent a good alternative [112]. On the other hand, to obtain
+more building information to promote change detection, airborne laser scanning data [91] and building
+thematic data [177] can provide 3-D information and a priori knowledge of buildings, respectively,
+and proved to be eﬀective.
+Land cover changes typically reﬂect changes in climatology and hydrology. Thus, AI-based
+change detection techniques can provide e ﬀective methods to monitor changes in resources and
+the environment. For example, forest monitoring is usually achieved by detecting changes using
+multi-period Landsat satellite images [45,63,150,196,232]. In addition to the Landsat data, the authors
+of [56] used an ANN to investigate LULC changes and the eﬀect on outlet runoﬀ by detecting LULC
+change locations. Surface water is essential for humans; using an ANN [230] or CNN [231], its changes
+can be detected e ﬀectively. Obtaining sea ice changes is crucial for navigation safety and climate
+research in the polar regions. The authors of [171] employed a transfer learning-based framework and
+a CNN model to detect sea ice changes from two-period SAR images, and obtained results with kappa
+coeﬃcient exceeding 94%.
+Natural disaster is a powerful agent that changes the appearance of the landscape. Therefore,
+change detection techniques based on RS data are signiﬁcant measures to monitor natural disasters.
+For example, more automatic and accurate landslide mapping can be achieved through CNN-based
+change detection methods [20,93,129,233]. Damage assessment is an important application ﬁeld of
+change detection. After a natural disaster, AI-based change techniques can help to identify damaged
+areas using pre-event and post-event data. Existing research mainly includes tsunamis [92,119,190,234,
+236], ﬂoods [235], ﬁres [104], and earthquakes [19,110].
+Many change detection techniques focus on applications that are closely related to people’s
+daily lives, but in [170], a new AI-based approach is proposed for planetary surface change detection,
+employing a transfer learning-based framework and convolutional AE models. The experiments
+showed that the proposed method was superior to a diﬀerence image-based method.
+7. Challenges and Opportunities for AI-Based Change Detection
+By combining general AI-based change detection frameworks and the network structure
+summarized in Sections 4 and 5, change detection for various applications can be implemented.
+The design of the AI model usually needs to consider the multi-period input data type, training set size,
+and desired change map. Speciﬁcally, a mapping transformation-based structure or pseudo-siamese
+structure should be considered ﬁrst based on heterogeneous data. To obtain from–to change
+maps, post-classiﬁcation structure is the best choice. If training samples are insu ﬃcient, a transfer
+learning-based structure can help alleviate this problem, and the use of AEs and GANs can also reduce
+the dependence on ground truth. Change detection based on long-term sequence data is usually
+implemented using the multi-model integrated structure and an RNN model. A CNN has strong
+feature extraction capability, and is the best choice when there are suﬃcient training samples.
+Various applications of AI-based change detection have demonstrated that AI techniques have
+achieved great success in the ﬁeld of change detection in RS community. However, there are many
+challenges in the processes, and they relate to the following:
+• With the development of various platforms and sensors, they bring signiﬁcant challenges such as
+high-dimensional datasets (the high spatial resolution and hyperspectral features), complex data
+structures (nonlinear and overlapping distributions), and the nonlinear optimization problem
+(high computational complexity). The complexity of multi-source data greatly contributes to
+the diﬃculty of learning robust and discriminative representations from training data with AI
+techniques. This can be considered a challenge of heterogeneous big data processing;
+• The supervised AI methods require massive training samples, which are usually obtained by
+time-consuming and labor-intensive processes such as human interpretation of RS products and
+=== Page 21 ===
+Remote Sens. 2020, 12, 1688 21 of 35
+ﬁeld surveys. It is a big challenge to achieve a robust model of AI-based methods with insuﬃcient
+training samples. Unsupervised AI techniques need to be developed;
+• There are various eﬃcient and accurate AI models and frameworks, as we review in Sections 4
+and 5. At present, researchers constantly propose novel AI-based change detection approaches
+endlessly. Still, it is also a great challenge to choose an eﬃcient one and ensure its accuracy for
+diﬀerent applications. The reliability of AI needs to be considered in practical applications.
+Some researchers have explored solutions to these problems and proposed useful strategies.
+We will discuss them separately and give our views.
+7.1. Heterogeneous Big Data Processing
+Heterogeneity is one of the main characteristics of big data and heterogeneous data, causing
+problems in the generation and analytics of change detection results [ 237]. From the data source
+perspective, RS technology can provide various data types for change detection, such as SAR, GIS data,
+high-resolution satellite images, and various time and space measured data. These data with high
+variability of data types and formats are diﬃcult to use due to missing values, high data redundancy,
+and untruthfulness. Moreover, the generalization ability of existing AI methods needs to be improved
+in RS data processing, especially in heterogeneous big data processing [88]. Therefore, in our opinion,
+the following aspects need further study:
+• Although some AI-based change detection methods based on heterogeneous data have achieved
+satisfactory results, as summarized in Section 3.1.4, the types of sensor and data size of these
+studies are relatively limited. Moreover, they mainly consider change detection between diﬀerent
+source data rather than ﬁnding the fusion of data in the same period. The full use of multi-source
+data at the same period (e.g., optical RS images and DEM) and data fusion theories (i.e., mutual
+compensation of various types of data), combined with AI techniques, would help improve the
+accuracy of change detection suﬃciently;
+• Since current change detection methods mainly depends on the detection of 2D information,
+with the development of 3D reconstruction techniques, using 3D data to detect changes in buildings,
+etc., is also a direction of future development [ 6]. Among such techniques, 3D reconstruction
+based on oblique images or laser point cloud data and 3D information integration based on aerial
+imagery and ground-level street view imagery (i.e., air–ground integration) are the hot topics of
+research. There are still no eﬀective AI techniques that implement 3D change detection;
+• The processing of RS big data requires a large amount of computing resources, limiting the
+implementation of the AI model. For example, the processing of large-format data usually needs
+to be processed in blocks, which easily leads to edge problems. The large amount of data means
+that large trainable parameters in the AI model are required, resulting in a diﬃcult training process
+and consuming a high amount of computing resources. Therefore, it is necessary to balance the
+amount of data and the number of trainable parameters. They pose challenges to the design of
+AI-based change detection approaches.
+In short, heterogeneous big data should be considered when designing AI models for change
+detection so that it can be practically used for RS big data processing, which is worth pursuing.
+7.2. Unsupervised AI
+Although domain knowledge can be used to help design representations in traditional machine
+learning methods, the quest for AI is motivating the design of more powerful unsupervised
+representation-learning algorithms [238]. This is because unsupervised AI possesses the capacity of
+learning hierarchy features directly from the data itself, and can be used to make data-driven decisions.
+The research on unsupervised AI can be considered in the following aspects:
+=== Page 22 ===
+Remote Sens. 2020, 12, 1688 22 of 35
+• Due to the lack of labeled samples to train eﬃcient AI models in the past few years, many researchers
+have devoted great eﬀorts to these problems and have consistently produced impressive results.
+New unsupervised AI techniques are constantly emerging, including GAN, transfer learning,
+and AEs, as summarized in Section 4.4. Although these techniques alleviate the lack of samples to
+a certain extent, there is still room for improvement;
+• Change detection is generally regarded as a low-likelihood problem (i.e., the unchanged in the
+change map is much larger than the changed), with the uncertainty of the change location and
+direction. The current unsupervised AI techniques do not easily solve this problem due to the
+lack of prior knowledge. Excluding supervised AI, weakly- and semi-supervised AI techniques
+are feasible solutions, but further research is needed to improve performance. Nevertheless,
+pure unsupervised AI technique for change detection should be the ultimate goal;
+• One of the reasons for studying unsupervised AI techniques is the lack of training samples,
+i.e., prior knowledge. Considering that the Internet has entered the Web 2.0 era (emphasizing
+user-generated content, ease of use, participatory culture and interoperability for end users),
+using crowd-source data as a priori knowledge is a good alternative solution. For example,
+OpenStreetMap [32], a free wiki world map, can provide a large amount of annotation data labeled
+by volunteers for the training of AI models. Although the label precision of some crowd-sourced
+data is not high, the AI model can also be trained in a weakly supervised manner to achieve
+change detection.
+On the other hand, given the current trends in CV , unsupervised AI techniques will remain a hot
+research ﬁeld and even more popular in change detection as well.
+7.3. Reliability of AI
+Although many change detection frameworks using AI present the model structure, their trainable
+parameters are opaque, like black boxes, which make it diﬃcult to determine why they do what they
+do or how they work [ 239]. The reliability of AI aims to develop techniques to help improve the
+reliability and interpretability of the change detection methods. Therefore, it is necessary to develop
+robust AI and interpretable AI for change detection. The relevant theoretical literature can be found
+in [240,241]. We only discuss strategies that can be used to improve the reliability of change detection
+results from the following aspects:
+• Strategy 1: Reduce errors caused by data sources, such as using preprocessing (e.g., spectral
+and radiometric correction) to reduce the uncertainty of data caused by geometric errors and
+spectral diﬀerences, or fusing multiple data to improve the reliability of the original data, thereby
+improving the reliability of the change detection results. To date, there have been some studies
+considering the impact of registration [242] and algorithm fusion [243];
+• Strategy 2: Improve the interpretability of AI models through a sub-modular model structure,
+which can help to understand the operation principle of the entire AI model by understanding the
+function of each sub-module. For example, the region-proposals component in R-CNN can be
+clearly understood as a generator to predict the regions of the objects;
+• Strategy 3: Improve the robustness of AI models by integration of multiple algorithms and results.
+Ensemble learning is a good solution [15,244], which can improve the accuracy of the ﬁnal result
+by using the results of multiple models;
+• Strategy 4 : Improve the practicality of the AI model results by integrating post-processing
+algorithms, such as the Markov random ﬁeld [245], the conditional random ﬁeld [246], and level
+set evolution [247], which can help remove noise points and provide accurate boundaries. This is
+critical for some cartographic applications;
+• Strategy 5: Improve the ﬁneness of change maps through reﬁned detection units. According to
+the detection unit of change detection, it can be divided into scene level, patch or super-pixel level,
+pixel level and sub-pixel level from coarse to ﬁne. From the aspect of reliability, sub-pixel level is
+=== Page 23 ===
+Remote Sens. 2020, 12, 1688 23 of 35
+the best choice because it alleviates the problem of mixed pixels in RS images. However, this easily
+leads to high computational complexity. Therefore, using diﬀerent detection units according to
+diﬀerent land cover types is the best solution, which requires a well-designed AI model;
+• Strategy 6: Improve the representation of change maps by detecting changes in each instance.
+As we introduced in Section 6, the change maps can be grouped into binary maps, one-class
+maps, from–to maps, and instance maps. The instance change map is more practical but still
+lacks research. It can provide change information for each instance, and is more reﬂective of
+real-world changes. Moreover, it can avoid the limitation of the binary map without semantic
+information and the restriction of the from–to map by the classiﬁcation system, thereby improving
+the reliability of the ﬁnal result.
+When using AI techniques for change detection, factors that a ﬀect the reliability of data
+preprocessing, model training, change feature extraction, and accuracy assessment should be
+considered. This aims toward the most reasonable AI framework to improve the reliability of
+change detection results.
+In this section, a summary of the challenges and opportunities for AI-based change detection
+techniques has been delineated and we have put forward our prospects. The development of AI-based
+change detection techniques depends on the future endeavor on overcoming these challenges;the eﬀorts
+and innovations of researchers would push forward further successes of the techniques.
+8. Conclusions
+This review presents the latest methods, applications, and challenges of the AI-based change
+detection techniques. For beginners, the implementation process of AI-based change detection is
+introduced. Considering that the validity of training data is one of the major challenges, the commonly
+used data sources and existing datasets used for change detection were fully surveyed. Although the
+current public datasets have increased signiﬁcantly, openly labeled datasets for change detection are
+still scarce and deﬁcient, which requires the joint eﬀorts of the RS community. The systematic analysis
+of the general network frameworks and commonly used networks in AI adopted for change detection
+shows that great progress has been made in the combination of AI for change detection, but there are
+still many challenges in change detection with heterogeneous big data processing, unsupervised AI,
+and the reliability of AI. This means that further research needs to be pushed forward. This review
+oﬀers a clearer organization and will help researchers understand this ﬁeld.
+Author Contributions: All authors contributed in a substantial way to the manuscript. W.S. and M.Z. conceived
+the review. M.Z. wrote the manuscript. M.Z. and R.Z. contributed to the discussion of the review. M.Z., R.Z., S.C.
+and Z.Z. made contribution to the review of related literature. All authors discussed the basic structure of the
+manuscript. W.S. designed the overall structure of the review, reviewed the manuscript and supervised the study
+for all the stages. All authors have read and agreed to the published version of the manuscript.
+Funding: This research was funded by the Ministry of Science and Technology of the People’s Republic of China,
+Grant No. 2017YFB0503604.
+Acknowledgments: The authors sincerely appreciate that academic editors and reviewers give their help
+comments and constructive suggestions.
+Conﬂicts of Interest: The authors declare no conﬂict of interest.
+References
+1. Singh, A. Digital change detection techniques using remotely sensed data. Int. J. Remote Sens. 1989,
+10, 989–1003. [CrossRef]
+2. Liu, S.; Marinelli, D.; Bruzzone, L.; Bovolo, F. A Review of Change Detection in Multitemporal Hyperspectral
+Images: Current Techniques, Applications, and Challenges. IEEE Geosci. Remote Sens. Mag. 2019, 7, 140–158.
+[CrossRef]
+3. Tewkesbury, A.P .; Comber, A.; Tate, N.J.; Lamb, A.; Fisher, P .F. A critical synthesis of remotely sensed optical
+image change detection techniques. Remote Sens. Environ. 2015, 160, 1–14. [CrossRef]
+=== Page 24 ===
+Remote Sens. 2020, 12, 1688 24 of 35
+4. Lu, D.; Mausel, P .; Brondizio, E.; Mor án, E. Change detection techniques. Int. J. Remote Sens. 2004,
+25, 2365–2401. [CrossRef]
+5. Chen, G.; Hay, G.J.; De Carvalho, L.M.T.; A Wulder, M. Object-based change detection.Int. J. Remote Sens.
+2012, 33, 4434–4457. [CrossRef]
+6. Qin, R.; Tian, J.; Reinartz, P . 3D change detection–Approaches and applications.ISPRS J. Photogramm. Remote
+Sens. 2016, 122, 41–56. [CrossRef]
+7. Hussain, M.; Chen, D.M.; Cheng, A.; Wei, H.; Stanley, D. Change detection from remotely sensed images:
+From pixel-based to object-based approaches. ISPRS J. Photogramm. Remote Sens. 2013, 80, 91–106. [CrossRef]
+8. Kaplan, A.; Haenlein, M. Siri in my hand: Who’s the fairest in the land? On the interpretations, illustrations,
+and implications of artiﬁcial intelligence. Bus. Horiz. 2019, 62, 15–25. [CrossRef]
+9. Zhang, W.; Lu, X. The Spectral-Spatial Joint Learning for Change Detection in Multispectral Imagery.
+Remote Sens. 2019, 11, 240. [CrossRef]
+10. Fang, B.; Pan, L.; Kou, R. Dual Learning-Based Siamese Framework for Change Detection Using Bi-Temporal
+VHR Optical Remote Sensing Images. Remote Sens. 2019, 11, 1292. [CrossRef]
+11. Zhong, Y.; Ma, A.; Ong, Y.-S.; Zhu, Z.; Zhang, L. Computational intelligence in optical remote sensing image
+processing. Appl. Soft Comput. 2018, 64, 75–93. [CrossRef]
+12. Ma, L.; Liu, Y.; Zhang, X.; Ye, Y.; Yin, G.; Johnson, B.A. Deep learning in remote sensing applications:
+A meta-analysis and review. ISPRS J. Photogramm. Remote. Sens. 2019, 152, 166–177. [CrossRef]
+13. Ball, J.E.; Anderson, D.T.; Chan, C.S. Comprehensive survey of deep learning in remote sensing: Theories,
+tools, and challenges for the community. J. Appl. Remote Sens. 2017, 11, 1. [CrossRef]
+14. Chen, H.; Wu, C.; Du, B.; Zhang, L.; Wang, L. Change Detection in Multisource VHR Images via Deep
+Siamese Convolutional Multiple-Layers Recurrent Neural Network. IEEE Trans. Geosci. Remote Sens. 2020,
+58, 2848–2864. [CrossRef]
+15. Wang, X.; Liu, S.; Du, P .; Liang, H.; Xia, J.; Li, Y. Object-Based Change Detection in Urban Areas from High
+Spatial Resolution Images Based on Multiple Features and Ensemble Learning. Remote Sens. 2018, 10, 276.
+[CrossRef]
+16. Zhang, P .; Gong, M.; Su, L.; Liu, J.; Li, Z. Change detection based on deep feature representation and mapping
+transformation for multi-spatial-resolution remote sensing images. ISPRS J. Photogramm. Remote Sens. 2016,
+116, 24–41. [CrossRef]
+17. Zhao, W.; Mou, L.; Chen, J.; Bo, Y.; Emery, W.J. Incorporating Metric Learning and Adversarial Network for
+Seasonal Invariant Change Detection. IEEE Trans. Geosci. Remote Sens. 2020, 58, 2720–2731. [CrossRef]
+18. Zhao, J.J.; Gong, M.G.; Liu, J.; Jiao, L.C. Deep learning to classify diﬀerence image for image change detection.
+In Proceedings of the 2014 International Joint Conference on Neural Networks, Beijing, China, 6–11 July
+2014; IEEE: New York, NY, USA, 2014; pp. 397–403.
+19. Ji, M.; Liu, L.; Du, R.; Buchroithner, M.F. A Comparative Study of Texture and Convolutional Neural Network
+Features for Detecting Collapsed Buildings After Earthquakes Using Pre- and Post-Event Satellite Imagery.
+Remote Sens. 2019, 11, 1202. [CrossRef]
+20. Lei, T.; Zhang, Y.; Lv, Z.; Li, S.; Liu, S.; Nandi, A.K. Landslide Inventory Mapping From Bitemporal Images
+Using Deep Convolutional Neural Networks. IEEE Geosci. Remote Sens. Lett. 2019, 16, 1–5. [CrossRef]
+21. Geng, J.; Ma, X.; Zhou, X.; Wang, H. Saliency-Guided Deep Neural Networks for SAR Image Change
+Detection. IEEE Trans. Geosci. Remote Sens. 2019, 57, 7365–7377. [CrossRef]
+22. Zhan, Y.; Fu, K.; Yan, M.; Sun, X.; Wang, H.; Qiu, X. Change Detection Based on Deep Siamese Convolutional
+Network for Optical Aerial Images. IEEE Geosci. Remote Sens. Lett. 2017, 14, 1845–1849. [CrossRef]
+23. Cao, G.; Wang, B.; Xavier, H.-C.; Yang, D.; Southworth, J. A new diﬀerence image creation method based on
+deep neural networks for change detection in remote-sensing images. Int. J. Remote Sens. 2017, 38, 7161–7175.
+[CrossRef]
+24. Gong, M.; Zhao, J.; Liu, J.; Miao, Q.; Jiao, L. Change Detection in Synthetic Aperture Radar Images Based on
+Deep Neural Networks. IEEE Trans. Neural Netw. Learn. Syst. 2016, 27, 125–138. [CrossRef] [PubMed]
+25. TensorFlow. Available online: https: //www.tensorﬂow.org/ (accessed on 5 May 2020).
+26. Keras. Available online: https: //keras.io/ (accessed on 5 May 2020).
+27. Pytorch. Available online: https: //pytorch.org/ (accessed on 5 May 2020).
+28. Ca ﬀe. Available online: https://caﬀe.berkeleyvision.org/ (accessed on 5 May 2020).
+=== Page 25 ===
+Remote Sens. 2020, 12, 1688 25 of 35
+29. Ghouaiel, N.; Lefevre, S. Coupling ground-level panoramas and aerial imagery for change detection. Geospat.
+Inf. Sci. 2016, 19, 222–232. [CrossRef]
+30. Regmi, K.; Shah, M. Bridging the Domain Gap for Ground-to-Aerial Image Matching. arXiv 2019,
+arXiv:1904.11045.
+31. Kang, J.; Körner, M.; Wang, Y.; Taubenbock, H.; Zhu, X.X. Building instance classiﬁcation using street view
+images. ISPRS J. Photogramm. Remote. Sens. 2018, 145, 44–59. [CrossRef]
+32. OpenStreetMap. Available online: http: //www.openstreetmap.org/ (accessed on 4 May 2020).
+33. ISPRS Benchmarks. Available online: http://www2.isprs.org/commissions/comm3/wg4/3d-semantic-labeling.
+html (accessed on 4 May 2020).
+34. Cordts, M.; Omran, M.; Ramos, S.; Rehfeld, T.; Enzweiler, M.; Benenson, R.; Franke, U.; Roth, S.; Schiele, B.
+The cityscapes dataset for semantic urban scene understanding. In Proceedings of the IEEE Conference on
+Computer Vision and Pattern Recognition, Seattle, WA, USA, 27–30 June 2016; pp. 3213–3223.
+35. Baumgardner, M.F.; Biehl, L.L.; Landgrebe, D.A. 220 band aviris hyperspectral image data set: June 12, 1992
+indian pine test site 3. Purdue Univ. Res. Repos. 2015, 10, R7RX991C.
+36. Li, X.; Yuan, Z.; Wang, Q. Unsupervised Deep Noise Modeling for Hyperspectral Image Change Detection.
+Remote Sens. 2019, 11, 258. [CrossRef]
+37. Huang, F.; Yu, Y.; Feng, T. Hyperspectral remote sensing image change detection based on tensor and deep
+learning. J. Vis. Commun. Image Represent. 2019, 58, 233–244. [CrossRef]
+38. Song, A.; Choi, J.; Han, Y.; Kim, Y. Change Detection in Hyperspectral Images Using Recurrent 3D Fully
+Convolutional Networks. Remote Sens. 2018, 10, 1827. [CrossRef]
+39. Wang, Q.; Yuan, Z.; Du, Q.; Li, X. GETNET: A General End-to-End 2-D CNN Framework for Hyperspectral
+Image Change Detection. IEEE Trans. Geosci. Remote Sens. 2018, 57, 3–13. [CrossRef]
+40. He, Y.; Weng, Q.High Spatial Resolution Remote Sensing: Data, Analysis, and Applications ; CRC Press: Boca
+Raton, FL, USA, 2018.
+41. Anees, A.; Aryal, J.; O’Reilly, M.M.; Gale, T.; Wardlaw, T. A robust multi-kernel change detection framework
+for detecting leaf beetle defoliation using Landsat 7 ETM+ data. ISPRS J. Photogramm. Remote Sens. 2016,
+122, 167–178. [CrossRef]
+42. Dai, X.L.; Khorram, S. Remotely sensed change detection based on artiﬁcial neural networks. Photogramm.
+Eng. Remote Sens. 1999, 65, 1187–1194.
+43. Bruzzone, L.; Cossu, R. An RBF neural network approach for detecting land-cover transitions. In Image and
+Signal Processing for Remote Sensing Vii; Serpico, S.B., Ed.; Spie-Int Soc Optical Engineering: Bellingham, WA,
+USA, 2002; Volume 4541, pp. 223–231.
+44. Abuelgasim, A.; Ross, W.; Gopal, S.; Woodcock, C. Change Detection Using Adaptive Fuzzy Neural Networks.
+Remote Sens. Environ. 1999, 70, 208–223. [CrossRef]
+45. Deilmai, B.R.; Kanniah, K.D.; Rasib, A.W.; Ari ﬃn, A. Comparison of pixel -based and artiﬁcial neural
+networks classiﬁcation methods for detecting forest cover changes in Malaysia. In Proceedings of the 8th
+International Symposium of the Digital Earth, Univ Teknologi Malaysia, Inst Geospatial Sci & Technol,
+Kuching, Malaysia, 26–29 August 2013; Iop Publishing Ltd.: Bristol, UK, 2014; Volume 18.
+46. Feldberg, I.; Netanyahu, N.S.; Shoshany, M. A neural network-based technique for change detection of linear
+features and its application to a Mediterranean region. In Proceedings of the IEEE International Geoscience
+and Remote Sensing Symposium, IGARSS, Toronto, ON, Canada, 24–28 June 2002; Volume 2, pp. 1195–1197.
+[CrossRef]
+47. Ghosh, A.; Subudhi, B.N.; Bruzzone, L. Integration of Gibbs Markov Random Field and Hopﬁeld-Type
+Neural Networks for Unsupervised Change Detection in Remotely Sensed Multitemporal Images. IEEE
+Trans. Image Process. 2013, 22, 3087–3096. [CrossRef]
+48. Ghosh, S.; Bruzzone, L.; Patra, S.; Bovolo, F.; Ghosh, A. A Context-Sensitive Technique for Unsupervised
+Change Detection Based on Hopﬁeld-Type Neural Networks. IEEE Trans. Geosci. Remote Sens. 2007, 45,
+778–789. [CrossRef]
+49. Ghosh, S.; Patra, S.; Ghosh, A. An unsupervised context-sensitive change detection technique based on
+modiﬁed self-organizing feature map neural network. Int. J. Approx. Reason. 2009, 50, 37–50. [CrossRef]
+50. Han, M.; Zhang, C.; Zhou, Y. Object-wise joint-classiﬁcation change detection for remote sensing images
+based on entropy query-by fuzzy ARTMAP .GISci. Remote Sens. 2018, 55, 265–284. [CrossRef]
+=== Page 26 ===
+Remote Sens. 2020, 12, 1688 26 of 35
+51. Lyu, H.; Lu, H.; Mou, L. Learning a Transferable Change Rule from a Recurrent Neural Network for Land
+Cover Change Detection. Remote Sens. 2016, 8, 506. [CrossRef]
+52. Lyu, H.; Lu, H.; Mou, L.; Li, W.; Wright, J.S.; Li, X.; Li, X.; Zhu, X.X.; Wang, J.; Yu, L.; et al. Long-Term
+Annual Mapping of Four Cities on Diﬀerent Continents by Applying a Deep Information Learning Method
+to Landsat Data. Remote Sens. 2018, 10, 471. [CrossRef]
+53. Mou, L.C.; Zhu, X.X. A recurrent convolutional neural network for land cover change detection in multispectral
+images. In Proceedings of the Igarss 2018 IEEE International Geoscience and Remote Sensing Symposium,
+Valencia, Spain, 22–27 July 2018; IEEE: New York, NY, USA, 2018; pp. 4363–4366.
+54. Neagoe, V .E.; Ciotec, A.D.; Carata, S.V . A new multispectral pixel change detection approach using
+pulse-coupled neural networks for change vector analysis. In Proceedings of the 2016 IEEE International
+Geoscience and Remote Sensing Symposium, Beijing, China, 10–15 July 2016; IEEE: New York, NY, USA,
+2016; pp. 3386–3389. [CrossRef]
+55. Neagoe, V .E.; Stoica, R.M.; Ciurea, A.I. A modular neural network model for change detection in earth
+observation imagery. In Proceedings of the 2013 IEEE International Geoscience and Remote Sensing
+Symposium, Melbourne, Australia, 21–26 July 2013; IEEE: New York, NY, USA, 2013; pp. 3321–3324.
+[CrossRef]
+56. Nourani, V .; Roushangar, K.; Andalib, G. An inverse method for watershed change detection using hybrid
+conceptual and artiﬁcial intelligence approaches. J. Hydrol. 2018, 562, 371–384. [CrossRef]
+57. Patra, S.; Ghosh, S.; Ghosh, A. Unsupervised Change Detection in Remote-Sensing Images Using Modiﬁed
+Self-Organizing Feature Map Neural Network; IEEE Computer Soc.: Los Alamitos, CA, USA, 2007; p. 716.
+58. Roy, M.; Ghosh, S.; Ghosh, A. A novel approach for change detection of remotely sensed images using
+semi-supervised multiple classiﬁer system. Inf. Sci. 2014, 269, 35–47. [CrossRef]
+59. Roy, M.; Ghosh, S.; Ghosh, A. A Neural Approach Under Active Learning Mode for Change Detection in
+Remotely Sensed Images. IEEE J. Sel. Top. Appl. Earth Obs. Remote Sens. 2013, 7, 1200–1206. [CrossRef]
+60. Sadeghi, V .; Ahmadi, F.F.; Ebadi, H. A new fuzzy measurement approach for automatic change detection
+using remotely sensed images. Measurement 2018, 127, 1–14. [CrossRef]
+61. Seto, K.C.; Liu, W. Comparing ARTMAP Neural Network with the Maximum-Likelihood Classiﬁer for
+Detecting Urban Change. Photogramm. Eng. Remote Sens. 2003, 69, 981–990. [CrossRef]
+62. Varamesh, S. Detection of land use changes in NorthEastern Iran by Landsat satellite data. Appl. Ecol.
+Environ. Res. 2017, 15, 1443–1454. [CrossRef]
+63. E Woodcock, C.; A Macomber, S.; Pax-Lenney, M.; Cohen, W.B. Monitoring large areas for forest change using
+Landsat: Generalization across space, time and Landsat sensors. Remote Sens. Environ. 2001, 78, 194–203.
+[CrossRef]
+64. Mou, L.; Bruzzone, L.; Zhu, X.X. Learning Spectral-Spatial-Temporal Features via a Recurrent Convolutional
+Neural Network for Change Detection in Multispectral Imagery. IEEE Trans. Geosci. Remote Sens. 2018,
+57, 924–935. [CrossRef]
+65. Li, X.; Ling, F.; Du, Y.; Feng, Q.; Zhang, Y. A spatial–temporal Hopﬁeld neural network approach for
+super-resolution land cover mapping with multi-temporal di ﬀerent resolution remotely sensed images.
+ISPRS J. Photogramm. Remote Sens. 2014, 93, 76–87. [CrossRef]
+66. Benedetti, A.; Picchiani, M.; Del Frate, F. Sentinel-1 and Sentinel-2 data fusion for urban change detection. In
+Proceedings of the 2018 IEEE International Geoscience and Remote Sensing Symposium, Valencia, Spain,
+22–27 July 2018; IEEE: New York, NY, USA, 2018; pp. 1962–1965.
+67. Pomente, A.; Picchiani, M.; Del Frate, F. Sentinel-2 change detection based on deep features. In Proceedings
+of the 2018 IEEE International Geoscience and Remote Sensing Symposium, Valencia, Spain, 22–27 July 2018;
+IEEE: New York, NY, USA, 2018; pp. 6859–6862.
+68. Arabi, M.E.A.; Karoui, M.S.; Djerriri, K. Optical remote sensing change detection through deep siamese
+network. In Proceedings of the 2018 IEEE International Geoscience and Remote Sensing Symposium,
+Valencia, Spain, 22–27 July 2018; IEEE: New York, NY, USA, 2018; pp. 5041–5044.
+69. Chen, H.; Hua, Y.; Ren, Q.; Zhang, Y. Comprehensive analysis of regional human-driven environmental
+change with multitemporal remote sensing images using observed object-speciﬁed dynamic Bayesian
+network. J. Appl. Remote Sens. 2016, 10, 16021. [CrossRef]
+=== Page 27 ===
+Remote Sens. 2020, 12, 1688 27 of 35
+70. Paciﬁci, F.; Del Frate, F.; Solimini, C.; Emery, W. An Innovative Neural-Net Method to Detect Temporal
+Changes in High-Resolution Optical Satellite Imagery. IEEE Trans. Geosci. Remote Sens. 2007, 45, 2940–2952.
+[CrossRef]
+71. Paciﬁci, F.; Del Frate, F. Automatic Change Detection in Very High Resolution Images with Pulse-Coupled
+Neural Networks. IEEE Geosci. Remote. Sens. Lett. 2009, 7, 58–62. [CrossRef]
+72. Saha, S.; Bovolo, F.; Bruzzone, L. Unsupervised Deep Change Vector Analysis for Multiple-Change Detection
+in VHR Images. IEEE Trans. Geosci. Remote Sens. 2019, 57, 3677–3693. [CrossRef]
+73. Larabi, M.E.A.; Chaib, S.; Bakhti, K.; Hasni, K.; Bouhlala, M.A. High-resolution optical remote sensing
+imagery change detection through deep transfer learning. J. Appl. Remote Sens. 2019, 13, 18. [CrossRef]
+74. Liu, R.; Cheng, Z.; Zhang, L.; Li, J. Remote Sensing Image Change Detection Based on Information
+Transmission and Attention Mechanism. IEEE Access 2019, 7, 156349–156359. [CrossRef]
+75. Han, M.; Chang, N.-B.; Yao, W.; Chen, L.-C.; Xu, S. Change detection of land use and land cover in an urban
+region with SPOT-5 images and partial Lanczos extreme learning machine. J. Appl. Remote Sens. 2010,
+4, 43551. [CrossRef]
+76. Nemmour, H.; Chibani, Y. Neural Network Combination by Fuzzy Integral for Robust Change Detection in
+Remotely Sensed Imagery. EURASIP J. Adv. Signal Process. 2005, 2005, 2187–2195. [CrossRef]
+77. Nemmour, H.; Chibani, Y. Fuzzy neural network architecture for change detection in remotely sensed
+imagery. Int. J. Remote Sens. 2006, 27, 705–717. [CrossRef]
+78. Peng, D.; Guan, H. Unsupervised change detection method based on saliency analysis and convolutional
+neural network. J. Appl. Remote Sens. 2019, 13, 024512. [CrossRef]
+79. Zhang, P .; Gong, M.; Zhang, H.; Liu, J.; Ban, Y. Unsupervised Diﬀerence Representation Learning for Detecting
+Multiple Types of Changes in Multitemporal Remote Sensing Images. IEEE Trans. Geosci. Remote Sens. 2018,
+57, 2277–2289. [CrossRef]
+80. Fan, J.; Lin, K.; Han, M. A Novel Joint Change Detection Approach Based on Weight-Clustering Sparse
+Autoencoders. IEEE J. Sel. Top. Appl. Earth Obs. Remote Sens. 2019, 12, 685–699. [CrossRef]
+81. Bai, T.; Sun, K.; Deng, S.; Chen, Y. Comparison of four machine learning methods for object-oriented change
+detection in high-resolution satellite imagery. In Mippr 2017: Remote Sensing Image Processing, Geographic
+Information Systems, and Other Applications; Sang, N., Ma, J., Chen, Z., Eds.; Spie-Int Soc Optical Engineering:
+Bellingham, WA, USA, 2018; Volume 10611.
+82. Saha, S.; Bovolo, F.; Bruzzone, L. Unsupervised multiple-change detection in VHR optical images using
+deep features. In Proceedings of the 2018 IEEE International Geoscience and Remote Sensing Symposium,
+Valencia, Spain, 22–27 July 2018; IEEE: New York, NY, USA, 2018; pp. 1902–1905.
+83. Gong, M.; Yang, Y.; Zhan, T.; Niu, X.; Liu, C. A Generative Discriminatory Classiﬁed Network for Change
+Detection in Multispectral Imagery. IEEE J. Sel. Top. Appl. Earth Obs. Remote Sens. 2019, 12, 321–333.
+[CrossRef]
+84. Gong, M.; Zhan, T.; Zhang, P .; Miao, Q. Superpixel-Based Diﬀerence Representation Learning for Change
+Detection in Multispectral Remote Sensing Images. IEEE Trans. Geosci. Remote. Sens. 2017, 55, 2658–2673.
+[CrossRef]
+85. Huang, F.; Yu, Y.; Feng, T. Automatic building change image quality assessment in high resolution remote
+sensing based on deep learning. J. Vis. Commun. Image Represent. 2019, 63, 10. [CrossRef]
+86. Nemoto, K.; Imaizumi, T.; Hikosaka, S.; Hamaguchi, R.; Sato, M.; Fujita, A. Building change detection
+via a combination of CNNs using only RGB aerial imageries. Remote Sens. Technol. Appl. Urban Environ.
+2017, 10431. [CrossRef]
+87. Han, P .; Ma, C.; Li, Q.; Leng, P .; Bu, S.; Li, K. Aerial image change detection using dual regions of interest
+networks. Neurocomputing 2019, 349, 190–201. [CrossRef]
+88. Ji, S.; Wei, S.; Lu, M. Fully Convolutional Networks for Multisource Building Extraction from an Open Aerial
+and Satellite Imagery Data Set. IEEE Trans. Geosci. Remote Sens. 2018, 57, 574–586. [CrossRef]
+89. Ji, S.; Shen, Y.; Lu, M.; Zhang, Y. Building Instance Change Detection from Large-Scale Aerial Images using
+Convolutional Neural Networks and Simulated Samples. Remote Sens. 2019, 11, 1343. [CrossRef]
+90. Sun, B.; Li, G.-Z.; Han, M.; Lin, Q.-H. A deep learning approach to detecting changes in buildings from aerial
+images. In Proceedings of the International Symposium on Neural Networks, Moscow, Russia, 10–12 July
+2019; pp. 414–421.
+=== Page 28 ===
+Remote Sens. 2020, 12, 1688 28 of 35
+91. Zhang, Z.; Vosselman, G.; Gerke, M.; Persello, C.; Tuia, D.; Yang, M.Y. Detecting Building Changes between
+Airborne Laser Scanning and Photogrammetric Data. Remote Sens. 2019, 11, 2417. [CrossRef]
+92. Fujita, A.; Sakurada, K.; Imaizumi, T.; Ito, R.; Hikosaka, S.; Nakamura, R. Damage detection from aerial images
+via convolutional neural networks. In Proceedings of the 2017 Fifteenth IAPR International Conference on
+Machine Vision Applications (MVA), Nagoya Univ, Nagoya, Japan, 08–12 May 2017; pp. 5–8.
+93. Fang, B.; Chen, G.; Pan, L.; Kou, R.; Wang, L. GAN-Based Siamese Framework for Landslide Inventory
+Mapping Using Bi-Temporal Optical Remote Sensing Images. IEEE Geosci. Remote Sens. Lett. 2020, 1–5.
+[CrossRef]
+94. Jiang, H.; Hu, X.; Li, K.; Zhang, J.; Gong, J.; Zhang, M. PGA-SiamNet: Pyramid Feature-Based
+Attention-Guided Siamese Network for Remote Sensing Orthoimagery Building Change Detection. Remote
+Sens. 2020, 12, 484. [CrossRef]
+95. Wiratama, W.; Sim, D. Fusion Network for Change Detection of High-Resolution Panchromatic Imagery.
+Appl. Sci. 2019, 9, 1441. [CrossRef]
+96. Chan, Y.K.; Koo, V .C. An introduction to synthetic aperture radar (SAR).Prog. Electromagn. Res. B 2008,
+2, 27–60. [CrossRef]
+97. De, S.; Pirrone, D.; Bovolo, F.; Bruzzone, L.; Bhattacharya, A. A novel change detection framework based
+on deep learning for the analysis of multi-temporal polarimetric SAR images. In Proceedings of the 2017
+IEEE International Geoscience and Remote Sensing Symposium, Fort Worth, TX, USA, 23–28 July 2017; IEEE:
+New York, NY, USA, 2017; pp. 5193–5196.
+98. Chen, H.; Jiao, L.; Liang, M.; Liu, F.; Yang, S.; Hou, B. Fast unsupervised deep fusion network for change
+detection of multitemporal SAR images. Neurocomputing 2019, 332, 56–70. [CrossRef]
+99. Geng, J.; Wang, H.Y.; Fan, J.C.; Ma, X.R. Change Detection of SAR Images Based on Supervised Contractive
+Autoencoders and Fuzzy Clustering. In Proceedings of the International Workshop on Remote Sensing with
+Intelligent Processing (RSIP), Shang Hai, China, 18–21 May 2017; IEEE: New York, NY, USA, 2017.
+100. Gong, M.; Yang, H.; Zhang, P . Feature learning and change feature classiﬁcation based on deep learning for
+ternary change detection in SAR images. ISPRS J. Photogramm. Remote Sens. 2017, 129, 212–225. [CrossRef]
+101. Lei, Y.; Liu, X.; Shi, J.; Lei, C.; Wang, J. Multiscale Superpixel Segmentation with Deep Features for Change
+Detection. IEEE Access 2019, 7, 36600–36616. [CrossRef]
+102. Li, Y.Y.; Zhou, L.H.; Peng, C.; Jiao, L.C. Spatial fuzzy clustering and deep auto-encoder for unsupervised
+change detection in synthetic aperture radar images. In Proceedings of the 2018 IEEE International
+Geoscience and Remote Sensing Symposium, Valencia, Spain, 22–27 July 2018; IEEE: New York, NY, USA,
+2018; pp. 4479–4482.
+103. Lv, N.; Chen, C.; Qiu, T.; Sangaiah, A.K. Deep Learning and Superpixel Feature Extraction Based on
+Contractive Autoencoder for Change Detection in SAR Images. IEEE Trans. Ind. Inform. 2018, 14, 5530–5538.
+[CrossRef]
+104. Planinšiˇ c, P .; Gleich, D. Temporal Change Detection in SAR Images Using Log Cumulants and Stacked
+Autoencoder. IEEE Geosci. Remote Sens. Lett. 2018, 15, 297–301. [CrossRef]
+105. Su, L.; Cao, X. Fuzzy autoencoder for multiple change detection in remote sensing images.J. Appl. Remote Sens.
+2018, 12, 035014. [CrossRef]
+106. Su, L.Z.; Shi, J.; Zhang, P .Z.; Wang, Z.; Gong, M.G. Detecting multiple changes from multi-temporal images by
+using stacked denosing autoencoder based change vector analysis. In Proceedings of the 2016 International
+Joint Conference on Neural Networks, Vancouver, Canada, 24–29 July 2016; IEEE: New York, NY, USA, 2016;
+pp. 1269–1276.
+107. Luo, B.; Hu, C.; Su, X.; Wang, Y. Diﬀerentially Deep Subspace Representation for Unsupervised Change
+Detection of SAR Images. Remote Sens. 2019, 11, 2740. [CrossRef]
+108. Dong, H.; Ma, W.; Wu, Y.; Gong, M.; Jiao, L. Local Descriptor Learning for Change Detection in Synthetic
+Aperture Radar Images via Convolutional Neural Networks. IEEE Access 2018, 7, 15389–15403. [CrossRef]
+109. Liu, T.; Li, Y.; Cao, Y.; Shen, Q. Change detection in multitemporal synthetic aperture radar images using
+dual-channel convolutional neural network. J. Appl. Remote Sens. 2017, 11, 1. [CrossRef]
+110. Saha, S.; Bovolo, F.; Bruzzone, L. Destroyed-buildings detection from VHR SAR images using deep features.
+In Image and Signal Processing for Remote Sensing aXxiv; Bruzzone, L., Bovolo, F., Eds.; Spie-Int Soc Optical
+Engineering: Bellingham, WA, USA, 2018; Volume 10789.
+=== Page 29 ===
+Remote Sens. 2020, 12, 1688 29 of 35
+111. Li, Y.; Peng, C.; Chen, Y.; Jiao, L.; Zhou, L.; Shang, R. A Deep Learning Method for Change Detection in
+Synthetic Aperture Radar Images. IEEE Trans. Geosci. Remote Sens. 2019, 57, 5751–5763. [CrossRef]
+112. Jaturapitpornchai, R.; Matsuoka, M.; Kanemoto, N.; Kuzuoka, S.; Ito, R.; Nakamura, R. Newly Built
+Construction Detection in SAR Images Using Deep Learning. Remote Sens. 2019, 11, 1444. [CrossRef]
+113. Cui, B.; Zhang, Y.; Yan, L.; Wei, J.; Wu, H. An Unsupervised SAR Change Detection Method Based on
+Stochastic Subspace Ensemble Learning. Remote Sens. 2019, 11, 1314. [CrossRef]
+114. Liu, F.; Jiao, L.; Tang, X.; Yang, S.; Ma, W.; Hou, B. Local Restricted Convolutional Neural Network for Change
+Detection in Polarimetric SAR Images. IEEE Trans. Neural Netw. Learn. Syst. 2019, 30, 818–833. [CrossRef]
+115. Guo, E.; Fu, X.; Zhu, J.; Deng, M.; Liu, Y.; Zhu, Q.; Li, H. Learning to measure change: Fully convolutional
+Siamese metric networks for scene change detection. arXiv 2018, arXiv:1810.09111.
+116. Huélamo, C.G.; Alcantarilla, P .F.; Bergasa, L.M.; López-Guillén, E. Change detection tool based on GSV to
+help DNNs training. In Proceedings of the Workshop of Physical Agents, Madrid, Spain, 22–23 November
+2018; pp. 115–131.
+117. Varghese, A.; Gubbi, J.; Ramaswamy, A.; Balamuralidhar, P . ChangeNet: A deep learning architecture for
+visual change detection. In Proceedings of the European Conference on Computer Vision (ECCV), Munich,
+Germany, 8–14 September 2018; pp. 129–145.
+118. Sakurada, K.; Wang, W.; Kawaguchi, N.; Nakamura, R. Dense optical ﬂow based change detection network
+robust to diﬀerence of camera viewpoints. arXiv 2017, arXiv:1712.02941.
+119. Sakurada, K.; Okatani, T. Change detection from a street image pair using CNN features and superpixel
+segmentation. In Proceedings of the British Machine Vision Conference (BMVC), Swansea, UK, 7–10
+September 2015; pp. 61.1–61.12.
+120. Bu, S.; Li, Q.; Han, P .; Leng, P .; Li, K. Mask-CDNet: A mask based pixel change detection network.
+Neurocomputing 2020, 378, 166–178. [CrossRef]
+121. Liu, J.; Gong, M.; Qin, A.; Zhang, P . A Deep Convolutional Coupling Network for Change Detection Based
+on Heterogeneous Optical and Radar Images. IEEE Trans. Neural Netw. Learn. Syst. 2018, 29, 545–559.
+[CrossRef]
+122. Zhan, T.; Gong, M.; Jiang, X.; Li, S. Log-Based Transformation Feature Learning for Change Detection in
+Heterogeneous Images. IEEE Geosci. Remote Sens. Lett. 2018, 15, 1352–1356. [CrossRef]
+123. Zhan, T.; Gong, M.; Liu, J.; Zhang, P . Iterative feature mapping network for detecting multiple changes in
+multi-source remote sensing images. ISPRS J. Photogramm. Remote Sens. 2018, 146, 38–51. [CrossRef]
+124. Ma, W.; Xiong, Y.; Wu, Y.; Yang, H.; Zhang, X.-R.; Jiao, L. Change Detection in Remote Sensing Images Based
+on Image Mapping and a Deep Capsule Network. Remote Sens. 2019, 11, 626. [CrossRef]
+125. Yang, M.; Jiao, L.; Liu, F.; Hou, B.; Yang, S. Transferred Deep Learning-Based Change Detection in Remote
+Sensing Images. IEEE Trans. Geosci. Remote Sens. 2019, 57, 6960–6973. [CrossRef]
+126. Gong, M.; Niu, X.; Zhan, T.; Zhang, M. A coupling translation network for change detection in heterogeneous
+images. Int. J. Remote Sens. 2018, 40, 3647–3672. [CrossRef]
+127. Niu, X.; Gong, M.; Zhan, T.; Yang, Y. A Conditional Adversarial Network for Change Detection in
+Heterogeneous Images. IEEE Geosci. Remote Sens. Lett. 2018, 16, 45–49. [CrossRef]
+128. Zhang, C.; Wei, S.; Ji, S.; Lu, M. Detecting Large-Scale Urban Land Cover Changes from Very High Resolution
+Remote Sensing Images Using CNN-Based Classiﬁcation. ISPRS Int. J. Geo Inf. 2019, 8, 189. [CrossRef]
+129. Chen, Z.; Zhang, Y.; Ouyang, C.; Zhang, F.; Ma, J. Automated Landslides Detection for Mountain Cities
+Using Multi-Temporal Remote Sensing Imagery. Sensors 2018, 18, 821. [CrossRef]
+130. Huang, D.M.; Wei, C.T.; Yu, J.C.; Wang, J.L. A method of detecting land use change of remote sensing images
+based on texture features and DEM. In Proceedings of the International Conference on Intelligent Earth
+Observing and Applications, Guilin, China, 23–24 October 2015; Zhou, G., Kang, C., Eds.; Spie-Int Soc
+Optical Engineering: Bellingham, WA, USA, 2015; Volume 9808.
+131. Iino, S.; Ito, R.; Doi, K.; Imaizumi, T.; Hikosaka, S. CNN-based generation of high-accuracy urban distribution
+maps utilising SAR satellite imagery for short-term change monitoring. Int. J. Image Data Fusion 2018,
+9, 302–318. [CrossRef]
+132. Goyette, N.; Jodoin, P .-M.; Porikli, F.; Konrad, J.; Ishwar, P . Changedetection. net: A new change detection
+benchmark dataset. In Proceedings of the 2012 IEEE Computer Society Conference on Computer Vision and
+Pattern Recognition Workshops, Providence, RI, USA, 16–21 June 2012; pp. 1–8.
+=== Page 30 ===
+Remote Sens. 2020, 12, 1688 30 of 35
+133. Wang, Y.; Jodoin, P .-M.; Porikli, F.; Konrad, J.; Benezeth, Y.; Ishwar, P . CDnet 2014: An Expanded Change
+Detection Benchmark Dataset. In Proceedings of the 2014 IEEE Conference on Computer Vision and Pattern
+Recognition Workshops, Columbus, OH, USA, 23–28 June 2014; pp. 393–400.
+134. Goyette, N.; Jodoin, P .-M.; Porikli, F.; Konrad, J.; Ishwar, P . A Novel Video Dataset for Change Detection
+Benchmarking. IEEE Trans. Image Process. 2014, 23, 4663–4679. [CrossRef]
+135. Hyperspectral Change Detection Dataset. Available online: https: //citius.usc.es/investigacion/datasets/
+hyperspectral-change-detection-dataset (accessed on 4 May 2020).
+136. Daudt, R.C.; Le Saux, B.; Boulch, A.; Gousseau, Y. Multitask learning for large-scale semantic change detection.
+Comput. Vis. Image Underst. 2019, 187, 102783. [CrossRef]
+137. Benedek, C.; Sziranyi, T. Change Detection in Optical Aerial Images by a Multilayer Conditional Mixed
+Markov Model. IEEE Trans. Geosci. Remote Sens. 2009, 47, 3416–3430. [CrossRef]
+138. Benedek, C.; Sziranyi, T. A Mixed Markov model for change detection in aerial photos with large time
+diﬀerences. In Proceedings of the 2008 19th International Conference on Pattern Recognition, Tampa, FL,
+USA, 8–11 December 2008; pp. 1–4.
+139. Daudt, R.C.; Le Saux, B.; Boulch, A.; Gousseau, Y. Urban change detection for multispectral earth observation
+using convolutional neural networks. In Proceedings of the IGARSS 2018 IEEE International Geoscience and
+Remote Sensing Symposium, Valencia, Spain, 22–27 July 2018; pp. 2115–2118.
+140. Zhang, M.; Shi, W. A Feature Diﬀerence Convolutional Neural Network-Based Change Detection Method.
+IEEE Trans. Geosci. Remote Sens. 2020, 1–15. [CrossRef]
+141. Wu, C.; Zhang, L.; Zhang, L. A scene change detection framework for multi-temporal very high resolution
+remote sensing images. Signal Process. 2016, 124, 184–197. [CrossRef]
+142. Gupta, R.; Goodman, B.; Patel, N.; Hosfelt, R.; Sajeev, S.; Heim, E.; Doshi, J.; Lucas, K.; Choset, H.; Gaston, M.
+Creating xBD: A dataset for assessing building damage from satellite imagery. In Proceedings of the IEEE
+Conference on Computer Vision and Pattern Recognition Workshops, Long Beach, CA, USA, 16–20 June
+2019; pp. 10–17.
+143. Bourdis, N.; Marraud, D.; Sahbi, H. Constrained optical ﬂow for aerial image change detection. In Proceedings
+of the 2011 IEEE International Geoscience and Remote Sensing Symposium, Vancouver, BC, Canada, 24–29
+July 2011; pp. 4176–4179. [CrossRef]
+144. Lebedev, M.A.; Vizilter, Y.V .; Vygolov, O.V .; Knyaz, V .A.; Rubis, A.Y. Change detection in remote sensing
+images using conditional adversarial networks. ISPRS Int. Arch. Photogramm. Remote Sens. Spat. Inf. Sci.
+2018, 565–571. [CrossRef]
+145. Alcantarilla, P .F.; Stent, S.; Ros, G.; Arroyo, R.; Gherardi, R. Street-view change detection with deconvolutional
+networks. Auton. Robot. 2018, 42, 1301–1322. [CrossRef]
+146. Sakurada, K.; Okatani, T.; Deguchi, K. Detecting changes in 3D structure of a scene from multi-view images
+captured by a vehicle-mounted camera. In Proceedings of the IEEE Conference on Computer Vision and
+Pattern Recognition, Portland, OR, USA, 23–28 June 2013; pp. 137–144.
+147. Zagoruyko, S.; Komodakis, N. Learning to compare image patches via convolutional neural networks.
+In Proceedings of the 2015 IEEE Conference on Computer Vision and Pattern Recognition, Boston, MA, USA,
+7–12 June 2015; IEEE: New York, NY, USA, 2015; pp. 4353–4361.
+148. Liu, J.; Gong, M.; Zhao, J.; Li, H.; Jiao, L. Diﬀerence representation learning using stacked restricted Boltzmann
+machines for change detection in SAR images. Soft Comput. 2014, 20, 4645–4657. [CrossRef]
+149. Aghababaee, H.; Amini, J.; Tzeng, Y. Improving change detection methods of SAR images using fractals.
+Sci. Iran. 2013, 20, 15–22. [CrossRef]
+150. Gopal, S.; Woodcock, C. Remote sensing of forest change using artiﬁcial neural networks. IEEE Trans. Geosci.
+Remote Sens. 1996, 34, 398–404. [CrossRef]
+151. Xu, J.; Zhang, B.; Guo, H.; Lu, J.; Lin, Y. Combining iterative slow feature analysis and deep feature learning
+for change detection in high-resolution remote sensing images. J. Appl. Remote Sens. 2019, 13, 024506.
+[CrossRef]
+152. Touazi, A.; Bouchaﬀra, D. A k-nearest neighbor approach to improve change detection from remote sensing:
+Application to optical aerial images. In Proceedings of the 2015 15th International Conference on Intelligent
+Systems Design and Applications, Marrakech, Morocco, 14–16 December 2015; Abraham, A., Alimi, A.M.,
+Haqiq, A., Barbosa, L.O., BenAmar, C., Berqia, A., BenHalima, M., Muda, A.M., Ma, K., Eds.; IEEE:New York,
+NY, USA, 2015; pp. 98–103.
+=== Page 31 ===
+Remote Sens. 2020, 12, 1688 31 of 35
+153. Gao, Y.; Gao, F.; Dong, J.; Wang, S. Change Detection from Synthetic Aperture Radar Images Based on
+Channel Weighting-Based Deep Cascade Network. IEEE J. Sel. Top. Appl. Earth Obs. Remote Sens. 2019,
+12, 4517–4529. [CrossRef]
+154. Keshk, H.; Yin, X.-C. Change Detection in SAR Images Based on Deep Learning. Int. J. Aeronaut. Space Sci.
+2019, 1–11. [CrossRef]
+155. Zhang, M.; Xu, G.; Chen, K.; Yan, M.; Sun, X. Triplet-Based Semantic Relation Learning for Aerial Remote
+Sensing Image Change Detection. IEEE Geosci. Remote Sens. Lett. 2018, 16, 266–270. [CrossRef]
+156. Hedjam, R.; Abdesselam, A.; Melgani, F. Change detection from unlabeled remote sensing images using
+siamese ANN. In Proceedings of the IGARSS 2019—2019 IEEE International Geoscience and Remote Sensing
+Symposium, Yokohama, Japan, 28 July–2 August 2019; pp. 1530–1533.
+157. Chu, Y.; Cao, G.; Hayat, H. Change detection of remote sensing image based on deep neural networks. In
+Proceedings of the 2016 2nd International Conference on Artiﬁcial Intelligence and Industrial Engineering,
+Beijing, China, 20–11 November 2016; Sehiemy, R.E., Reaz, M.B.I., Eds.; Atlantis Press: Paris, France, 2016;
+Volume 133, pp. 262–267.
+158. Wiratama, W.; Lee, J.; Park, S.-E.; Sim, D. Dual-Dense Convolution Network for Change Detection of
+High-Resolution Panchromatic Imagery. Appl. Sci. 2018, 8, 1785. [CrossRef]
+159. Nguyen, T.P .; Pham, C.C.; Ha, S.V .-U.; Jeon, J.W. Change Detection by Training a Triplet Network for Motion
+Feature Extraction. IEEE Trans. Circuits Syst. Video Technol. 2018, 29, 433–446. [CrossRef]
+160. Su, L.; Gong, M.; Zhang, P .; Zhang, M.; Liu, J.; Yang, H. Deep learning and mapping based ternary change
+detection for information unbalanced images. Pattern Recognit. 2017, 66, 213–228. [CrossRef]
+161. Ye, Q.; Lu, X.; Huo, H.; Wan, L.; Guo, Y.; Fang, T. AggregationNet: Identifying multiple changes based on
+convolutional neural network in bitemporal optical remote sensing images. In Proceedings of the Paciﬁc-Asia
+Conference on Knowledge Discovery and Data Mining, Macau, China, 14–17 April 2019; pp. 375–386.
+162. Du, B.; Ru, L.; Wu, C.; Zhang, L. Unsupervised Deep Slow Feature Analysis for Change Detection in
+Multi-Temporal Remote Sensing Images. IEEE Trans. Geosci. Remote Sens. 2019, 57, 9976–9992. [CrossRef]
+163. Wu, C.; Chen, H.; Do, B.; Zhang, L. Unsupervised change detection in multi-temporal VHR images based on
+deep kernel PCA convolutional mapping network. arXiv 2019, arXiv:1912.08628.
+164. Rahman, F.; Vasu, B.; Van Cor, J.; Kerekes, J.; Savakis, A. Siamese network with multi-level features for
+patch-based change detection in satellite imagery. In Proceedings of the 2018 IEEE Global Conference on
+Signal and Information Processing, Anaheim, CA, USA, 26–29 November 2018; IEEE: New York, NY, USA,
+2018; pp. 958–962.
+165. Chen, H.; Wu, C.; Du, B.; Zhang, L. Deep siamese multi-scale convolutional network for change detection in
+multi-temporal VHR images. In Proceedings of the 2019 10th International Workshop on the Analysis of
+Multitemporal Remote Sensing Images (MultiTemp), Shanghai, China, 5–7 August 2019; pp. 1–4.
+166. Wang, M.; Tan, K.; Jia, X.; Wang, X.; Chen, Y. A Deep Siamese Network with Hybrid Convolutional Feature
+Extraction Module for Change Detection Based on Multi-sensor Remote Sensing Images. Remote Sens. 2020,
+12, 205. [CrossRef]
+167. Lim, K.; Jin, D.; Kim, C.-S. Change detection in high resolution satellite images using an ensemble of
+convolutional neural networks. In Proceedings of the 2018 Asia-Paciﬁc Signal and Information Processing
+Association Annual Summit and Conference (APSIPA ASC), Honolulu, HI, USA, 12–15 November 2018;
+pp. 509–515.
+168. El Amin, A.M.; Liu, Q.; Wang, Y. Zoom out CNNs Features for Optical Remote Sensing Change Detection. In
+Proceedings of the 2017 2nd International Conference on Image, Vision and Computing (ICIVC), Chengdu,
+China, 2–4 June 2017; pp. 812–817.
+169. Liu, J.; Chen, K.; Xu, G.; Sun, X.; Yan, M.; Diao, W.; Han, H. Convolutional Neural Network-Based Transfer
+Learning for Optical Aerial Images Change Detection. IEEE Geosci. Remote Sens. Lett. 2020, 17, 127–131.
+[CrossRef]
+170. Kerner, H.R.; Wagstaﬀ, K.L.; Bue, B.D.; Gray, P .C.; Bell, J.F.; Ben Amor, H.; Iii, J.F.B. Toward Generalized
+Change Detection on Planetary Surfaces with Convolutional Autoencoders and Transfer Learning. IEEE J.
+Sel. Top. Appl. Earth Obs. Remote Sens. 2019, 12, 3900–3918. [CrossRef]
+171. Gao, Y.; Gao, F.; Dong, J.; Wang, S. Transferred Deep Learning for Sea Ice Change Detection from
+Synthetic-Aperture Radar Images. IEEE Geosci. Remote Sens. Lett. 2019, 16, 1655–1659. [CrossRef]
+=== Page 32 ===
+Remote Sens. 2020, 12, 1688 32 of 35
+172. Wang, Y.; Du, B.; Ru, L.; Wu, C.; Luo, H. Scene change detection via deep convolution canonical correlation
+analysis neural network. In Proceedings of the IGARSS 2019—2019 IEEE International Geoscience and
+Remote Sensing Symposium, Yokohama, Japan, 28 July–2 August 2019; pp. 198–201.
+173. Hou, B.; Wang, Y.; Liu, Q. Change Detection Based on Deep Features and Low Rank.IEEE Geosci. Remote
+Sens. Lett. 2017, 14, 2418–2422. [CrossRef]
+174. El Amin, A.M.; Liu, Q.; Wang, Y. Convolutional neural network features based change detection in satellite
+images. In Froceedings of the First International Workshop on Pattern Recognition, Tokyo, Japan, 11–13 May 2016;
+Jiang, X., Chen, G., Capi, G., Ishii, C., Eds.; Spie-Int Soc Optical Engineering: Bellingham, WA, USA, 2016;
+Volume 0011.
+175. Cao, C.; Dragi´ cevi´ c, S.; Li, S. Land-Use Change Detection with Convolutional Neural Network Methods.
+Environments 2019, 6, 25. [CrossRef]
+176. Wu, C.; Zhang, L.; Du, B. Kernel Slow Feature Analysis for Scene Change Detection. IEEE Trans. Geosci.
+Remote Sens. 2017, 55, 2367–2384. [CrossRef]
+177. Ghaﬀarian, S.; Kerle, N.; Pasolli, E.; Arsanjani, J.J. Post-Disaster Building Database Updating Using Automated
+Deep Learning: An Integration of Pre-Disaster OpenStreetMap and Multi-Temporal Satellite Data. Remote
+Sens. 2019, 11, 2427. [CrossRef]
+178. Gao, F.; Dong, J.; Li, B.; Xu, Q. Automatic Change Detection in Synthetic Aperture Radar Images Based on
+PCANet. IEEE Geosci. Remote Sens. Lett. 2016, 13, 1–5. [CrossRef]
+179. Gao, F.; Liu, X.; Dong, J.; Zhong, G.; Jian, M. Change Detection in SAR Images Based on Deep Semi-NMF
+and SVD Networks. Remote Sens. 2017, 9, 435. [CrossRef]
+180. Li, M.; Lia, M.; Zhang, P .; Wu, Y.; Song, W.; An, L. SAR Image Change Detection Using PCANet Guided by
+Saliency Detection. IEEE Geosci. Remote Sens. Lett. 2018, 16, 402–406. [CrossRef]
+181. Liao, F.; Koshelev, E.; Milton, M.; Jin, Y.; Lu, E. Change detection by deep neural networks for synthetic
+aperture radar images. In Proceedings of the 2017 International Conference on Computing, Networking and
+Communications (ICNC), Santa Clara, CA, USA, 26–29 January 2017; pp. 947–951.
+182. Zhao, Q.N.; Gong, M.G.; Li, H.; Zhan, T.; Wang, Q. Three-class change detection in synthetic aperture radar
+images based on deep belief network. In Bio-Inspired Computing—Theories and Applications, Bic-Ta 2015 ;
+Gong, M., Pan, L., Song, T., Tang, K., Zhang, X., Eds.; Springer: Berlin/Heidelberg, Germany, 2015; Volume
+562, pp. 696–705.
+183. Samadi, F.; Akbarizadeh, G.; Kaabi, H. Change detection in SAR images using deep belief network: A new
+training approach based on morphological images. IET Image Process. 2019, 13, 2255–2264. [CrossRef]
+184. Zhao, W.; Wang, Z.; Gong, M.; Liu, J. Discriminative Feature Learning for Unsupervised Change Detection
+in Heterogeneous Images Based on a Coupled Neural Network. IEEE Trans. Geosci. Remote Sens. 2017,
+55, 7066–7080. [CrossRef]
+185. Daudt, R.C.; Saux, B.L.; Boulch, A.; Gousseau, Y. Guided anisotropic di ﬀusion and iterative learning for
+weakly supervised change detection. arXiv 2019, arXiv:1904.08208.
+186. Connors, C.; Vatsavai, R.R. Semi-supervised deep generative models for change detection in very high
+resolution imagery. In Proceedings of the 2017 IEEE International Geoscience and Remote Sensing Symposium,
+Fort Worth, TX, USA, 23–28 July 2017; pp. 1063–1066.
+187. Li, H.-C.; Yang, G.; Yang, W.; Du, Q.; Emery, W.J. Deep nonsmooth nonnegative matrix factorization network
+with semi-supervised learning for SAR image change detection. ISPRS J. Photogramm. Remote Sens. 2020,
+160, 167–179. [CrossRef]
+188. Zhang, X.; Shi, W.; Lv, Z.; Peng, F. Land Cover Change Detection from High-Resolution Remote Sensing
+Imagery Using Multitemporal Deep Feature Collaborative Learning and a Semi-supervised Chan–Vese
+Model. Remote Sens. 2019, 11, 2787. [CrossRef]
+189. Liu, G.; Li, L.; Jiao, L.; Dong, Y.; Li, X. Stacked Fisher autoencoder for SAR change detection. Pattern Recognit.
+2019, 96, 106971. [CrossRef]
+190. Sublime, J.; Kalinicheva, E. Automatic Post-Disaster Damage Mapping Using Deep-Learning Techniques for
+Change Detection: Case Study of the Tohoku Tsunami. Remote Sens. 2019, 11, 1123. [CrossRef]
+191. Goodfellow, I.; Bengio, Y.; Courville, A. Deep Learning; MIT Press: Cambridge, MA, USA, 2016.
+192. Zhu, B.; Gao, H.; Wang, X.; Xu, M.; Zhu, X. Change Detection Based on the Combination of Improved SegNet
+Neural Network and Morphology. In Proceedings of the 2018 IEEE 3rd International Conference on Image,
+Vision and Computing (ICIVC), Chong Qing, China, 27–29 June 2018; pp. 55–59.
+=== Page 33 ===
+Remote Sens. 2020, 12, 1688 33 of 35
+193. Peng, D.; Zhang, Y.; Guan, H. Guan End-to-End Change Detection for High Resolution Satellite Images
+Using Improved UNet++. Remote Sens. 2019, 11, 1382. [CrossRef]
+194. Venugopal, N. Automatic Semantic Segmentation with DeepLab Dilated Learning Network for Change
+Detection in Remote Sensing Images. Neural Process. Lett. 2020, 1–23. [CrossRef]
+195. Venugopal, N. Sample Selection Based Change Detection with Dilated Network Learning in Remote Sensing
+Images. Sens. Imaging: Int. J. 2019, 20, 31. [CrossRef]
+196. Khan, S.; He, X.; Porikli, F.; Bennamoun, M. Forest Change Detection in Incomplete Satellite Images with
+Deep Neural Networks. IEEE Trans. Geosci. Remote Sens. 2017, 55, 5407–5423. [CrossRef]
+197. Wang, Q.; Zhang, X.; Chen, G.; Dai, F.; Gong, Y.; Zhu, K. Change detection based on Faster R-CNN for
+high-resolution remote sensing images. Remote Sens. Lett. 2018, 9, 923–932. [CrossRef]
+198. Dewan, N.; Kashyap, V .; Kushwaha, A.S. A review of pulse coupled neural network.Iioab J. 2019, 10, 61–65.
+199. Liu, R.; Jia, Z.; Qin, X.; Yang, J.; Kasabov, N.K. SAR Image Change Detection Method Based on Pulse-Coupled
+Neural Network. J. Indian Soc. Remote Sens. 2016, 44, 443–450. [CrossRef]
+200. Pratola, C.; Del Frate, F.; Schiavon, G.; Solimini, D. Toward Fully Automatic Detection of Changes in Suburban
+Areas from VHR SAR Images by Combining Multiple Neural-Network Models. IEEE Trans. Geosci. Remote
+Sens. 2013, 51, 2055–2066. [CrossRef]
+201. Zhong, Y.; Liu, W.; Zhao, J.; Zhang, L. Change Detection Based on Pulse-Coupled Neural Networks and the
+NMI Feature for High Spatial Resolution Remote Sensing Imagery. IEEE Geosci. Remote Sens. Lett. 2015,
+12, 537–541. [CrossRef]
+202. Goodfellow, I.J.; Pouget-Abadie, J.; Mirza, M.; Xu, B.; Warde-Farley, D.; Ozair, S.; Courville, A.; Bengio, Y.
+Generative adversarial nets. In Advances in Neural Information Processing Systems 27 ; Ghahramani, Z.,
+Welling, M., Cortes, C., Lawrence, N.D., Weinberger, K.Q., Eds.; NIPS: La Jolla, CA, USA, 2014; Volume 27.
+203. Gong, M.; Niu, X.; Zhang, P .; Li, Z. Generative Adversarial Networks for Change Detection in Multispectral
+Imagery. IEEE Geosci. Remote. Sens. Lett. 2017, 14, 2310–2314. [CrossRef]
+204. Hou, B.; Liu, Q.; Wang, H.; Wang, Y. From W-Net to CDGAN: Bitemporal Change Detection via Deep
+Learning Techniques. IEEE Trans. Geosci. Remote Sens. 2020, 58, 1790–1802. [CrossRef]
+205. Wang, Q.; Shi, W.; Atkinson, P .; Li, Z. Land Cover Change Detection at Subpixel Resolution with a Hopﬁeld
+Neural Network. IEEE J. Sel. Top. Appl. Earth Obs. Remote Sens. 2014, 8, 1–14. [CrossRef]
+206. Chen, K.; Huo, C.; Zhou, Z.; Lu, H. Unsupervised Change Detection in High Spatial Resolution Optical Imagery
+Based on Modiﬁed Hopﬁeld Neural Network; IEEE: New York, NY, USA, 2008; pp. 281–285. [CrossRef]
+207. Subudhi, B.N.; Ghosh, S.; Ghosh, A. Spatial constraint hopﬁeld-type neural networks for detecting changes
+in remotely sensed multitemporal images. In Proceedings of the 2013 20th IEEE International Conference on
+Image Processing, Melbourne, VIC, Australia, 15–18 September 2013; pp. 3815–3819.
+208. Wu, K.; Du, Q.; Wang, Y.; Yang, Y. Supervised Sub-Pixel Mapping for Change Detection from Remotely
+Sensed Images with Diﬀerent Resolutions. Remote Sens. 2017, 9, 284. [CrossRef]
+209. Dalmiya, C.P .; Santhi, N.; Sathyabama, B. An enhanced back propagation method for change analysis of
+remote sensing images with adaptive preprocessing. Eur. J. Remote Sens. 2019, 1–12. [CrossRef]
+210. Castellana, L.; D’Addabbo, A.; Pasquariello, G. A composed supervised/unsupervised approach to improve
+change detection from remote sensing. Pattern Recognit. Lett. 2007, 28, 405–413. [CrossRef]
+211. Del Frate, F.; Paciﬁci, F.; Solimini, D. Monitoring Urban Land Cover in Rome, Italy, and Its Changes by
+Single-Polarization Multitemporal SAR Images. IEEE J. Sel. Top. Appl. Earth Obs. Remote Sens. 2008, 1, 87–97.
+[CrossRef]
+212. Mirici, M.E. Land use /cover change modelling in a mediterranean rural landscape using multi-layer
+perceptron and markov chain (mlp-mc). Appl. Ecol. Environ. Res. 2018, 16, 467–486. [CrossRef]
+213. Patra, S.; Ghosh, S.; Ghosh, A. Change detection of remote sensing images with semi-supervised multilayer
+perceptron. Fundam. Inform. 2008, 84, 429–442.
+214. Tarantino, C.; Blonda, P .; Pasquariello, G. Remote sensed data for automatic detection of land-use changes
+due to human activity in support to landslide studies. Nat. Hazards 2006, 41, 245–267. [CrossRef]
+215. Chen, J.; Zheng, G.; Fang, C.; Zhang, N.; Chen, J.; Wu, Z. Time-series processing of large scale remote sensing
+data with extreme learning machine. Neurocomputing 2014, 128, 199–206. [CrossRef]
+=== Page 34 ===
+Remote Sens. 2020, 12, 1688 34 of 35
+216. Tang, S.H.; Li, T.; Cheng, X.H. A Novel Remote Sensing Image Change Detection Algorithm Based on
+Self-Organizing Feature Map Neural Network Model. In Proceedings of the 2016 International Conference on
+Communication and Electronics Systems (ICCES), Coimbatore, India, 21–22 October 2016; IEEE: New York,
+NY, USA, 2016; pp. 1033–1038.
+217. Xiao, R.; Cui, R.; Lin, M.; Chen, L.; Ni, Y.; Lin, X.; Lin, X. SOMDNCD: Image Change Detection Based on
+Self-Organizing Maps and Deep Neural Networks. IEEE Access 2018, 6, 35915–35925. [CrossRef]
+218. Chen, X.; Li, X.W.; Ma, J.W. Urban Change Detection Based on Self-Organizing Feature Map Neural Network.
+In Proceedings of the 2004 IEEE International Geoscience and Remote Sensing Symposium, Anchorage, AK,
+USA, 20–24 September 2004; pp. 3428–3431.
+219. Ghosh, S.; Roy, M.; Ghosh, A. Semi-supervised change detection using modiﬁed self-organizing feature map
+neural network. Appl. Soft Comput. 2014, 15, 1–20. [CrossRef]
+220. Patra, S.; Ghosh, S.; Ghosh, A. Unsupervised Change Detection in Remote-Sensing Images using
+One-dimensional Self-Organizing Feature Map Neural Network. In Proceedings of the 9th International
+Conference on Information Technology (ICIT’06), Bhubaneswar, India, 18–21 December 2006; pp. 141–142.
+221. Song, Y.; Yuan, X.; Xu, H.; Yang, Y. A novel image change detection method based on enhanced growing
+self-organization feature map. Geoinformatics Remote Sens. Data Inf. 2006, 6419, 641915. [CrossRef]
+222. Coppin, P .; Jonckheere, I.; Nackaerts, K.; Muys, B.; Lambin, E. Review ArticleDigital change detection
+methods in ecosystem monitoring: A review. Int. J. Remote Sens. 2004, 25, 1565–1596. [CrossRef]
+223. Karpatne, A.; Jiang, Z.; Vatsavai, R.R.; Shekhar, S.; Kumar, V . Monitoring Land-Cover Changes:
+A Machine-Learning Perspective. IEEE Geosci. Remote Sens. Mag. 2016, 4, 8–21. [CrossRef]
+224. Tomoya, M.; Kanji, T. Change Detection under Global Viewpoint Uncertainty.arXiv 2017, arXiv:1703.00552.
+225. Yang, G.; Li, H.-C.; Wang, W.-Y.; Yang, W.; Emery, W.J. Unsupervised Change Detection Based on a Uniﬁed
+Framework for Weighted Collaborative Representation with RDDL and Fuzzy Clustering.IEEE Trans. Geosci.
+Remote Sens. 2019, 57, 8890–8903. [CrossRef]
+226. Durmusoglu, Z.; Tanriover, A. Modelling land use/cover change in Lake Mogan and surroundings using
+CA-Markov Chain Analysis. J. Environ. Boil. 2017, 38, 981–989. [CrossRef]
+227. Fan, F.; Wang, Y.; Wang, Z. Temporal and spatial change detecting (1998–2003) and predicting of land use
+and land cover in Core corridor of Pearl River Delta (China) by using TM and ETM+ images. Environ. Monit.
+Assess. 2007, 137, 127–147. [CrossRef]
+228. Tong, X.; Zhang, X.; Liu, M. Detection of urban sprawl using a genetic algorithm-evolved artiﬁcial neural
+network classiﬁcation in remote sensing: A case study in Jiading and Putuo districts of Shanghai, China. Int.
+J. Remote Sens. 2010, 31, 1485–1504. [CrossRef]
+229. Iino, S.; Ito, R.; Doi, K.; Imaizumi, T.; Hikosaka, S. Generating high-accuracy urban distribution map for
+short-term change monitoring based on convolutional neural network by utilizing SAR imagery. In Earth
+Resources and Environmental Remote Sensing/GIS Applications VIII; Michel, U., Schulz, K., Nikolakopoulos, K.G.,
+Civco, D., Eds.; Spie-Int Soc Optical Engineering: Bellingham, WA, USA, 2017; Volume 10428.
+230. Rokni, K.; Ahmad, A.; Solaimani, K.; Hazini, S. A new approach for surface water change detection:
+Integration of pixel level image fusion and image classiﬁcation techniques. Int. J. Appl. Earth Obs.
+Geoinformation 2015, 34, 226–234. [CrossRef]
+231. Song, A.; Kim, Y.; Kim, Y. Change Detection of Surface Water in Remote Sensing Images Based on Fully
+Convolutional Network. J. Coast. Res. 2019, 91, 426–430. [CrossRef]
+232. Lindquist, E.; D’Annunzio, R. Assessing Global Forest Land-Use Change by Object-Based Image Analysis.
+Remote Sens. 2016, 8, 678. [CrossRef]
+233. Ding, A.; Zhang, Q.; Zhou, X.; Dai, B. Automatic Recognition of Landslide Based on CNN and
+Texture Change Detection. In Proceedings of the 2016 31st Youth Academic Annual Conference of
+Chinese-Association-of-Automation (YAC), Wuhan, China, 11–13 November 2016; pp. 444–448.
+234. Singh, A.; Singh, K.K.; Nigam, M.J.; Pal, K. Detection of tsunami-induced changes using generalized
+improved fuzzy radial basis function neural network. Nat. Hazards 2015, 77, 367–381. [CrossRef]
+235. Peng, B.; Meng, Z.; Huang, Q.; Wang, C. Patch Similarity Convolutional Neural Network for Urban Flood
+Extent Mapping Using Bi-Temporal Satellite Multispectral Imagery. Remote Sens. 2019, 11, 2492. [CrossRef]
+236. Sakurada, K.; Tetsuka, D.; Okatani, T. Temporal city modeling using street level imagery.Comput. Vis. Image
+Underst. 2017, 157, 55–71. [CrossRef]
+237. Wang, L. Heterogeneous Data and Big Data Analytics. Autom. Control. Inf. Sci. 2017, 3, 8–15. [CrossRef]
+=== Page 35 ===
+Remote Sens. 2020, 12, 1688 35 of 35
+238. Bengio, Y.; Courville, A.C.; Vincent, P . Unsupervised Feature Learning and Deep Learning: A Review and
+New Perspectives. arXiv 2012, arXiv:1206.5538.
+239. Guidotti, R.; Monreale, A.; Ruggieri, S.; Turini, F.; Giannotti, F.; Pedreschi, D. A Survey of Methods for
+Explaining Black Box Models. ACM Comput. Surv. 2019, 51, 1–42. [CrossRef]
+240. Dietterich, T.G. Steps Toward Robust Artiﬁcial Intelligence. AI Mag. 2017, 38, 3–24. [CrossRef]
+241. Mueller, S.T.; Hoﬀman, R.R.; Clancey, W.; Emrey, A.; Klein, G. Explanation in human-AI systems: A literature
+meta-review, synopsis of key ideas and publications, and bibliography for explainable AI. arXiv 2019,
+arXiv:1902.01876.
+242. Shi, W.; Hao, M. Analysis of spatial distribution pattern of change-detection error caused by misregistration.
+Int. J. Remote Sens. 2013, 34, 6883–6897. [CrossRef]
+243. Zhang, P .; Shi, W.; Wong, M.-S.; Chen, J. A Reliability-Based Multi-Algorithm Fusion Technique in Detecting
+Changes in Land Cover. Remote Sens. 2013, 5, 1134–1151. [CrossRef]
+244. Bruzzone, L.; Cossu, R.; Vernazza, G. Detection of land-cover transitions by combining multidate classiﬁers.
+Pattern Recognit. Lett. 2004, 25, 1491–1500. [CrossRef]
+245. He, P .; Shi, W.; Miao, Z.; Zhang, H.; Cai, L. Advanced Markov random ﬁeld model based on local uncertainty
+for unsupervised change detection. Remote Sens. Lett. 2015, 6, 667–676. [CrossRef]
+246. Chen, L.-C.; Papandreou, G.; Kokkinos, I.; Murphy, K.; Yuille, A.L. DeepLab: Semantic Image Segmentation
+with Deep Convolutional Nets, Atrous Convolution, and Fully Connected CRFs. IEEE Trans. Pattern Anal.
+Mach. Intell. 2018, 40, 834–848. [CrossRef] [PubMed]
+247. Wang, Z.; Acuna, D.; Ling, H.; Kar, A.; Fidler, S. Object instance annotation with deep extreme level set
+evolution. In Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition, Long Beach,
+CA, USA, 16–20 June 2019; pp. 7500–7508.
+© 2020 by the authors. Licensee MDPI, Basel, Switzerland. This article is an open access
+article distributed under the terms and conditions of the Creative Commons Attribution
+(CC BY) license (http://creativecommons.org/licenses/by/4.0/).
